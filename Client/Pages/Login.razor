@@ -1,0 +1,75 @@
+﻿@page "/"
+@using vagtplanen.Shared.Models
+@inject HttpClient Http
+@using System.Net.Http
+@using BlazorPro.Spinkit
+
+@if (page_access == -1)
+{
+    <div class="login">
+        <h1>Login her</h1>
+        <RadzenCard class="w-1">
+            <RadzenTemplateForm Data=@("SimpleLogin")>
+                <RadzenLogin AllowRegister="false" AllowResetPassword="false" Login=@(args => OnLogin(args)) Style="margin-bottom: 20px;" />
+                @if (isLoading)
+                {<Chase />}
+            </RadzenTemplateForm>
+        </RadzenCard>
+    </div>
+
+}
+else if (page_access == 0)
+{
+    <VolunteerPage vol="@vol" />
+}
+else if (page_access == 10)
+{
+    <CoordinatorPage coor="@coor" />
+}
+else if (page_access == 1)
+{
+    <TeamPage tea="@tea" />
+}
+
+@code {
+    public int page_access = -1;
+    public bool isLoading = false;
+
+    public Volunteer vol = new();
+    public Coordinator coor = new();
+    public Team tea = new();
+
+    async Task OnLogin(LoginArgs args)
+    {
+        isLoading = true;
+        try
+        {
+            int res = await Http.GetFromJsonAsync<int>($"api/method/login/{args.Username}/{args.Password}");
+            if (res == 0)
+            {
+                vol = await Http.GetFromJsonAsync<Volunteer>($"api/volunteer/{args.Username}");
+                page_access = vol.access;
+                isLoading = false;
+            }
+            else if (res == 10)
+            {
+                coor = await Http.GetFromJsonAsync<Coordinator>($"api/coordinator/{args.Username}");
+                page_access = coor.access;
+                isLoading = false;
+            }
+            else if (res == 1)
+            {
+                tea = await Http.GetFromJsonAsync<Team>($"api/team/{args.Username}");
+                page_access = tea.access;
+                isLoading = false;
+            }
+        }
+        catch (Exception e)
+        {
+            isLoading = false;
+            Console.WriteLine(e.Message);
+        }
+
+    }
+
+}

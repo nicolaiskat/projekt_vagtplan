@@ -1,0 +1,93 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+@using vagtplanen.Shared.Models
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Opret team</h3>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+              
+                    <EditForm Model="@create">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <div>
+                                <label>Navn på team:</label>
+                                <div>
+                                    <InputText @bind-Value="@create.name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Navn på kontaktperson:</label>
+                                <div>
+                                    <InputText @bind-Value="@create.contact_name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Mobilnummer:</label>
+                                <div>
+                                    <InputText @bind-Value="@create.mobile" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Email:</label>
+                                <div>
+                                    <InputText @bind-Value="@create.email" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Kode:</label>
+                                <div>
+                                    <InputText @bind-Value="@create.password" />
+                                </div>
+                            </div>
+                        </div>
+                    </EditForm>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Opret</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public static Team create = new();
+    
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        await Http.PostAsJsonAsync("api/team", create);
+
+        await JsRuntime.InvokeVoidAsync("alert", "Bekræftelse. Teamet er oprettet.");
+
+
+        await OnClose.InvokeAsync(true);
+        create = new(); 
+    }
+
+
+
+}

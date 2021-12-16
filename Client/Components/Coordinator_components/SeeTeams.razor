@@ -1,0 +1,80 @@
+﻿@inject HttpClient Http
+@inject NavigationManager uriHelper
+@inject IJSRuntime JsRuntime
+@using vagtplanen.Shared.Models
+
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle teams</h3>
+            </div>
+            <div class="modal-body">
+                @if (teams == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Data="@teams" TItem="Team">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Team" Property="team_id" Title="ID" Width="70px" />
+                            <RadzenDataGridColumn TItem="Team" Property="name" Title="Teamnavn" />
+                            <RadzenDataGridColumn TItem="Team" Property="contact_name" Title="Kontaktperson" />
+                            <RadzenDataGridColumn TItem="Team" Property="mobile" Title="Telefon" />
+                            <RadzenDataGridColumn TItem="Team" Property="email" Title="Email" />
+                            <RadzenDataGridColumn TItem="Team" Property="delete" Title="Slet team" Width="60px" Filterable="false" Sortable="false">
+                                <Template Context="team">
+                                    <RadzenButton Icon="highlight_off" Click=@(args => deleteControl(team)) />
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                        </Columns>
+                    </RadzenDataGrid>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public Team[] teams;
+
+    public async void deleteControl(Team team)
+    {
+        await deleteTeam(team);
+        uriHelper.NavigateTo(uriHelper.Uri);
+    }
+
+    protected async Task deleteTeam(Team team)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Er du sikker på, at du vil slette teamets oplysninger?");
+        if (confirmed)
+        {
+            await Http.DeleteAsync($"api/team/{team.team_id}");
+            await ModalOk();
+        }
+    }
+
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        teams = await Http.GetFromJsonAsync<Team[]>("api/team");
+    }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+}

@@ -1,0 +1,128 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+@using vagtplanen.Shared.Models
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Opret vagt</h3>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="@createT">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <div>
+                            <label>Beskrivelse:</label>
+                            <div>
+                                <InputText @bind-Value="@createT.description" />
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+
+                <EditForm Model="@createS">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <div>
+                            <label>Vagt startdato:</label>
+                            <div>
+                                <input type="date" @bind="@startdate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Vagt starttid:</label>
+                        <div>
+                            <input type="time" @bind="@starttime" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Vagt slutdato:</label>
+                            <div>
+                                <input type="date" @bind="@enddate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Vagt sluttid:</label>
+                            <div>
+                                <input type="time" @bind="@endtime" />
+                            </div>
+                        </div>
+                    </div>
+
+                </EditForm>
+                <EditForm Model="@createT">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <div>
+                            <label>Antal vagter:</label>
+                            <div>
+                                <InputNumber @bind-Value="@createT.number_of_shifts" />
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Opret</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+
+    public static Shift createS = new();
+    public static TaskClass createT = new();
+
+
+    public DateTime startdate = DateTime.Now;
+    public DateTime starttime = DateTime.Now;
+
+    public DateTime enddate = DateTime.Now;
+    public DateTime endtime = DateTime.Now;
+
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        DateTime start = startdate.Date.Add(starttime.TimeOfDay);
+        createS.start_time = start;
+
+        DateTime end = enddate.Date.Add(endtime.TimeOfDay);
+        createS.end_time = end;
+
+        createT.shifts = new();
+        createT.shifts.Add(createS);
+
+        await Http.PostAsJsonAsync("api/taskClass", createT);
+
+        await JsRuntime.InvokeVoidAsync("alert", "Bekræftelse. Opgaven er oprettet.");
+        
+
+        await OnClose.InvokeAsync(true);
+    }
+
+
+
+}

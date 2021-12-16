@@ -1,0 +1,97 @@
+﻿@inject HttpClient Http
+
+<div class="modal fade show " id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle vagter</h3>
+            </div>
+            <div class="modal-body">
+                @if (shifts == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+            <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            @ref="@grid" Data="@shifts" TItem="Shift">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Shift" Property="shift_id" Title="ID" Width="70px" />
+                    <RadzenDataGridColumn TItem="Shift" Property="description" Title="Beskrivelse" />
+                    <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Start tidspunkt" />
+                    <RadzenDataGridColumn TItem="Shift" Property="end_time" Title="Slut tidspunkt" />
+                    <RadzenDataGridColumn TItem="Shift" Property="taken" Title="Er taget" />
+                    <RadzenDataGridColumn TItem="Shift" Property="locked" Title="Låst" />
+                    <RadzenDataGridColumn TItem="Shift" Property="locked" Title="Lås/Lås op">
+                        <Template Context="shift">
+                            @if (shift.locked == false)
+                            {
+                                <RadzenButton Icon="lock_outline" Click=@(args => OnLock(shift)) />
+                            }
+                            else
+                            {
+                                <RadzenButton Icon="lock_open" Click=@(args => OnLock(shift)) />
+                            }
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+                </RadzenDataGrid>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public List<Shift> shifts;
+    public RadzenDataGrid<Shift> grid;
+
+    protected async override Task OnInitializedAsync()
+    {
+        shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
+    }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+
+    async void OnLock(Shift s)
+    {
+        await Http.PostAsJsonAsync($"api/method/lockshift", s);
+        if (s.locked == false)
+        {
+            s.locked = true;
+        }
+        else if (s.locked == true)
+        {
+            s.locked = false;
+        };
+        await grid.Reload();
+    }
+
+    @*public void OnUpdateRow()
+    {
+        grid.Reload();
+    }
+
+    async Task SaveRow(Shift shift)
+    {
+        await grid.UpdateRow(shift);
+        await Http.PutAsJsonAsync<Shift>($"api", shift);
+    }
+
+    void CancelEdit(Shift shift)
+    {
+        grid.CancelEditRow(shift);
+    }*@
+
+}

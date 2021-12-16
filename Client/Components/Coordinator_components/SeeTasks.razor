@@ -1,0 +1,141 @@
+﻿@inject HttpClient Http
+@using vagtplanen.Shared.Models
+
+<div class="modal fade show " id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle vagter sorteret efter opgave</h3>
+            </div>
+            <div class="modal-body">
+                @if (tasks == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-xl-6 mb-4">
+                            <h3>Opgave: </h3>
+                            <RadzenDropDown Style="width:300px" TValue="int" @bind-Value="task.task_id" Placeholder="Vælg opgave" AllowFiltering="true" Data="@tasks.GroupBy(x => x.task_id).Select(g => g.First())" TextProperty="description" ValueProperty="task_id" />
+                            <RadzenButton Icon="lock_outline" Click=@(args => OnLockT(task))>Lås opgave</RadzenButton>
+                            <RadzenButton Icon="lock_open" Click=@(args => OnUnLockT(task))>Lås opgave op</RadzenButton>
+                        </div>
+                    </div>
+
+                    if (shifts == null)
+                    {
+                        <p><em>Loading...</em></p>
+                    }
+                    else
+                    {
+                        <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        @ref="grid" Data="@(shifts.Where(x => x.task.task_id == task.task_id))" TItem="Shift">
+                            <Columns>
+                                <RadzenDataGridColumn TItem="Shift" Property="task.description" Title="Beskrivelse" />
+                                <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Starttidspunkt" />
+                                <RadzenDataGridColumn TItem="Shift" Property="end_time" Title="Sluttidspunkt"/>
+                                <RadzenDataGridColumn TItem="Shift" Property="volunteer.email" Title="Taget af">
+                                    <Template Context="shift">
+                                        @if (shift.taken == true)
+                                        {
+                                            <p>@shift.volunteer.email</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Ikke taget</p>
+                                        }
+                                    </Template>
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="Shift" Property="locked" Title="Låst" />
+
+                                <RadzenDataGridColumn TItem="Shift" Property="locked" Title="Lås/Lås op">
+                                    <Template Context="shift">
+                                        @if (shift.locked == false)
+                                        {
+                                            <RadzenButton Icon="lock_outline" Click=@(args => OnLock(shift)) />
+                                        }
+                                        else
+                                        {
+                                            <RadzenButton Icon="lock_open" Click=@(args => OnLock(shift)) />
+                                        }
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Columns>
+                        </RadzenDataGrid>
+                    }
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public List<TaskClass> tasks;
+    public List<Shift> shifts;
+    public RadzenDataGrid<Shift> grid;
+
+    public TaskClass task = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        tasks = await Http.GetFromJsonAsync<List<TaskClass>>("api/taskclass");
+        shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
+    }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+    async void OnLock(Shift s)
+    {
+        await Http.PostAsJsonAsync($"api/method/lockshift", s);
+        if (s.locked == false)
+        {
+            s.locked = true;
+        }
+        else if (s.locked == true)
+        {
+            s.locked = false;
+        };
+        await grid.Reload();
+    }
+
+    async void OnLockT(TaskClass t)
+    {
+        task = await Http.GetFromJsonAsync<TaskClass>($"api/taskclass/{t.task_id}");
+        await Http.PostAsJsonAsync($"api/method/locktask", t);
+        foreach(Shift s in task.shifts)
+        {
+            await Http.PostAsJsonAsync($"api/method/lockshift", s);
+            s.locked = true;
+        };
+        shifts.Where(x => x.task.task_id == task.task_id)
+                    .ToList()
+                    .ForEach(x => x.locked = true);
+        await grid.Reload();
+    }
+    async void OnUnLockT(TaskClass t)
+    {
+        task = await Http.GetFromJsonAsync<TaskClass>($"api/taskclass/{t.task_id}");
+        await Http.PostAsJsonAsync($"api/method/locktask", t);
+        foreach (Shift s in task.shifts)
+        {
+            await Http.PostAsJsonAsync($"api/method/lockshift", s);
+            s.locked = false;
+        };
+        shifts.Where(x => x.task.task_id == task.task_id)
+                    .ToList()
+                    .ForEach(x => x.locked = false);
+        await grid.Reload();
+    }
+
+}

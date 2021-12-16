@@ -1,0 +1,56 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime 
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Mine kuponer</h3>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@vol">
+                    <RadzenDataGrid AllowFiltering="true" AllowPaging="true" @ref="@grid" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Data="@vol.coupons.Where(x => x.used == false)" TItem="Coupon">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Coupon" Property="description" Title="Beskrivelse" />
+                            <RadzenDataGridColumn TItem="Coupon" Property="coupon_id" Title="Brug" Width="60px" Filterable="false" Sortable="false">
+                                <Template Context="coupon">
+                                    <RadzenButton Icon="done" Click=@(args => OnUse(coupon)) />
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Volunteer vol { get; set; }
+    RadzenDataGrid<Coupon> grid;
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+
+    async Task OnUse(Coupon c)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Du er ved at bruge en af dine kuponer. Lad medarbejderen i boden trykke OK for at benytte din kupon.");
+        if (confirmed)
+        {
+            vol.coupons.Remove(c);
+            await Http.PostAsJsonAsync($"api/method/usecoupon/{vol.volunteer_id}", c);
+            await grid.Reload();
+        }
+    }
+}

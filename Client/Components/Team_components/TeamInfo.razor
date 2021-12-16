@@ -1,0 +1,88 @@
+﻿@using vagtplanen.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager uriHelper
+
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Her kan du rette i dine oplysninger.</h3>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@tea">
+                    <DataAnnotationsValidator />
+                    <div class="form-group ">
+                        <h5>Du vil automatisk blive logget ud, når du gemmer dine nye oplysninger.</h5>
+                        <div>
+                            <label>Teamnavn:</label>
+                            <div>
+                                <InputText @bind-Value="@tea.name" />
+                                <ValidationMessage For="@(() => tea.name)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Kontaktnavn:</label>
+                            <div>
+                                <InputText @bind-Value="@tea.contact_name" />
+                                <ValidationMessage For="@(() => tea.contact_name)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Mobilnummer:</label>
+                            <div>
+                                <InputText @bind-Value="@tea.mobile" />
+                                <ValidationMessage For="@(() => tea.mobile)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Email:</label>
+                            <div>
+                                <InputText @bind-Value="@tea.email" />
+                                <ValidationMessage For="@(() => tea.email)" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Gem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Team tea { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        await Http.PutAsJsonAsync<Team>("api/team", tea);
+        await OnClose.InvokeAsync(true);
+        Reload();
+    }
+
+    public void Reload()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+}

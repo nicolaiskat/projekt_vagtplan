@@ -1,0 +1,112 @@
+﻿@inject HttpClient Http
+@inject NavigationManager uriHelper
+@inject IJSRuntime JsRuntime 
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle ledige vagter</h3>
+            </div>
+            <div class="modal-body">
+                @if (shifts == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <EditForm Model="@vol">
+                        <RadzenDataGrid AllowFiltering="true" @ref="grid" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Data="@MyShifts()" TItem="Shift">
+                            <Columns>
+                                <RadzenDataGridColumn TItem="Shift" Property="task.description" Title="Beskrivelse" />
+                                <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Starttidspunkt" />
+                                <RadzenDataGridColumn TItem="Shift" Property="end_time" Title="Sluttidspunkt" />
+                                <RadzenDataGridColumn TItem="Shift" Property="shift_id" Title="Tag vagt" Width="75px" Filterable="false" Sortable="false">
+                                    <Template Context="shift">
+                                        <RadzenButton Icon="check_circle" Click=@(args => OnTake(shift)) />
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Columns>
+                        </RadzenDataGrid>
+                    </EditForm>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public List<Shift> shifts;
+
+    [Parameter] public Volunteer vol { get; set; }
+    RadzenDataGrid<Shift> grid;
+
+    protected async override Task OnInitializedAsync()
+    {
+        shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
+    }
+
+    public List<Shift> MyShifts()
+    {
+        var allShifts = shifts;
+        var myShifts = vol.shifts;
+
+        List<Shift> availableShifts = new List<Shift>();
+
+        bool available = true;
+
+        foreach (Shift shift in allShifts)
+        {
+            foreach (Shift myShift in myShifts)
+            {
+                if (shift.start_time.Ticks < myShift.start_time.Ticks && shift.end_time.Ticks > myShift.start_time.Ticks)
+                {
+                    available = false;
+                }
+                if (shift.start_time.Ticks < myShift.end_time.Ticks && shift.end_time.Ticks > myShift.end_time.Ticks)
+                {
+                    available = false;
+                }
+            }
+            if (available)
+            {
+                availableShifts.Add(shift);
+            }
+            else
+            {
+                available = true;
+            }
+        }
+        return availableShifts.Where(x => x.taken == false && (x.start_time.Ticks > DateTime.Now.Ticks)).ToList();
+    }
+
+    [Parameter]
+    public EventCallback<(bool, Shift)> OnClose { get; set; }
+
+    public Shift takenShift;
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync((false, new Shift()));
+    }
+
+    async void OnTake(Shift s)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Du er ved at tage en vagt. Tryk OK for at bekræfte.");
+        if (confirmed)
+        {
+            shifts.Remove(s);
+            s.taken = true;
+            takenShift = s;
+            takenShift.volunteer = vol;
+            await Http.PostAsJsonAsync($"api/method/assignshift", takenShift);
+            await grid.Reload();
+            await OnClose.InvokeAsync((false, takenShift));
+        }
+    }
+}

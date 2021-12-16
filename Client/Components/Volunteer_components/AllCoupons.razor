@@ -1,0 +1,81 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime 
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle kuponer</h3>
+            </div>
+            <div class="modal-body">
+                <h2>Du har @vol.points point</h2>
+                @if (coupons == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <EditForm Model="@vol">
+                        <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Data="@coupons" TItem="Coupon">
+                            <Columns>
+                                <RadzenDataGridColumn TItem="Coupon" Property="description" Title="Beskrivelse" />
+                                <RadzenDataGridColumn TItem="Coupon" Property="price" Title="Pris på kupon (point)" TextAlign="TextAlign.Center" />
+                                <RadzenDataGridColumn TItem="Coupon" Property="coupon_id" Title="Køb" Width="60px" Filterable="false" Sortable="false">
+                                    <Template Context="coupon">
+                                        <RadzenButton Icon="add_shopping_cart" Click=@(args => OnBuy(coupon)) />
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Columns>
+                        </RadzenDataGrid>
+                    </EditForm>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public List<Coupon> coupons;
+
+    [Parameter]
+    public Volunteer vol { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        coupons = await Http.GetFromJsonAsync<List<Coupon>>("api/coupon");
+    }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+
+    async void OnBuy(Coupon coupon)
+    {
+        if (vol.points >= coupon.price)
+        {
+            bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Du er ved at købe en kupon. Tryk OK for at bekræfte.");
+            if (confirmed)
+            {
+                vol.coupons.Add(coupon);
+                await Http.PostAsJsonAsync($"api/method/buycoupon/{vol.volunteer_id}", coupon);
+                await JsRuntime.InvokeVoidAsync("alert", "Kuponen er nu tilføjet til mine kuponer");
+            }
+            await JsRuntime.InvokeVoidAsync("alert", "Du har annulleret dette køb.");
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Du har ikke nok point til denne kupon.");
+        }
+    }
+}
+

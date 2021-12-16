@@ -1,0 +1,242 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj": {}
+  },
+  "projects": {
+    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj",
+        "projectName": "vagtplanen.Client",
+        "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj",
+        "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
+        "outputPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/nicolaiskat/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+                "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "BlazorPro.Spinkit": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Radzen.Blazor": {
+              "target": "Package",
+              "version": "[3.13.2, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Runtime.browser-wasm",
+              "version": "[5.0.12, 5.0.12]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.100/RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "browser-wasm": {
+          "#import": []
+        }
+      }
+    },
+    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj",
+        "projectName": "vagtplanen.Server",
+        "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj",
+        "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
+        "outputPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/nicolaiskat/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj": {
+                "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj"
+              },
+              "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+                "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "Dapper.SimpleCRUD": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly.Server": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[5.0.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
+        "projectName": "vagtplanen.Shared",
+        "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
+        "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
+        "outputPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/nicolaiskat/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

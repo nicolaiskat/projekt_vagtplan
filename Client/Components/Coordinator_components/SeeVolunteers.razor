@@ -1,0 +1,88 @@
+﻿@inject HttpClient Http
+@inject NavigationManager uriHelper
+@inject IJSRuntime JsRuntime
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle frivillige</h3>
+            </div>
+            <div class="modal-body">
+                @if (volunteers == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data="@volunteers" TItem="Volunteer">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Volunteer" Property="volunteer_id" Title="ID" Width="70px" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="first_name" Title="Fornavn" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="last_name" Title="Efternavn" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="mobile" Title="Telefon" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="email" Title="Email" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="address" Title="Adresse" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="hours" Title="Antal timer" />
+                        <RadzenDataGridColumn TItem="Volunteer" Property="delete" Title="Slet frivillig" Width="60px" Filterable="false" Sortable="false">
+                            <Template Context="volunteer">
+                                <RadzenButton Icon="highlight_off" Click=@(args => deleteControl(volunteer)) />
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Volunteer" Title="Skills" Width="200px" Filterable="false" Sortable="false">
+                            <Template Context="volunteer">
+                                @if (volunteer.skills.Count() == 0)
+                                {
+                                <RadzenDropDown AllowClear="true" TValue="string" Class="w-100"
+                                                Placeholder="Ingen skills" Data=@volunteer.skills TextProperty="name" ValueProperty="skill_id" />
+                                }
+                                else
+                                {
+                                <RadzenDropDown AllowClear="true" TValue="string" Class="w-100"
+                                                Placeholder="Se skills" Data=@volunteer.skills TextProperty="name" ValueProperty="skill_id" />
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code { public Volunteer[] volunteers;
+
+    private async void deleteControl(Volunteer vol)
+    {
+        await deleteVolunteer(vol);
+        uriHelper.NavigateTo(uriHelper.Uri);
+    }
+
+    protected async Task deleteVolunteer(Volunteer vol)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Er du sikker på, at du vil slette den frivilliges oplysninger?");
+        if (confirmed)
+        {
+            await Http.DeleteAsync($"api/volunteer/{vol.volunteer_id}");
+            await ModalOk();
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        volunteers = await Http.GetFromJsonAsync<Volunteer[]>("api/volunteer");
+    }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    } }

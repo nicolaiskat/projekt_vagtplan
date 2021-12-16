@@ -1,0 +1,111 @@
+﻿@inject HttpClient Http
+@inject NavigationManager uriHelper
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Her kan du rette i dine oplysninger.</h3>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@vol">
+                    <DataAnnotationsValidator />
+                    <div class="form-group ">
+                        <h5>Du vil automatisk blive logget ud, når du gemmer dine nye oplysninger.</h5>
+                        <div class="input-box">
+                            <label>Fornavn:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.first_name" />
+                                <ValidationMessage For="@(() => vol.first_name)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-box">
+                            <label>Efternavn:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.last_name" />
+                                <ValidationMessage For="@(() => vol.last_name)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-box">
+                            <label>Mobilnummer:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.mobile" />
+                                <ValidationMessage For="@(() => vol.mobile)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-box">
+                            <label>Email:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.email" />
+                                <ValidationMessage For="@(() => vol.email)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-box">
+                            <label>Adresse:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.address" />
+                                <ValidationMessage For="@(() => vol.address)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-box">
+                            <label>CPR-nummer:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.cpr" />
+                                <ValidationMessage For="@(() => vol.cpr)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-box">
+                            <label>Køn:</label>
+                            <div>
+                                <InputText @bind-Value="@vol.gender" />
+                                <ValidationMessage For="@(() => vol.gender)" />
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Gem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Volunteer vol { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        await Http.PutAsJsonAsync<Volunteer>("api/volunteer", vol);
+        await OnClose.InvokeAsync(true);
+        Reload();
+    }
+
+    public void Reload()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+}

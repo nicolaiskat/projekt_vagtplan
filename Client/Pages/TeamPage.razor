@@ -1,0 +1,137 @@
+﻿@using vagtplanen.Shared.Models;
+@using vagtplanen.Client.Components.Volunteer_components;
+@using vagtplanen.Client.Components.Team_components;
+
+@inject HttpClient Http
+@inject NavigationManager uriHelper
+
+<div class="top-row px-3">
+    <button type="button" class="btn btn-primary" id="right" @onclick="@ReloadPage">Log ud</button>
+</div>
+
+<EditForm Model="@tea">
+    <h1>Velkommen @tea.name</h1>
+
+    <RadzenCard class="w-6">
+        <div class="row">
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Ledige vagter:</b>
+                        <div>Her kan du se og vælge tilgængelige ledige vagter.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenAvailableTeamtasksDialog()">Se vagter</button>
+                    </div>
+                </div>
+            </RadzenCard >
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Personlige oplysninger:</b>
+                        <div>Her kan du se og ændre dine personlige oplysninger.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenTeamInfoDialog()">Se oplysninger</button>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+    </RadzenCard>
+
+     <div class="teamtask">
+        @if (teamtask == null)
+        {<p><em>...Loading teamtask</em></p>}
+        else
+        {
+            <h2>Teamets vagter</h2>
+            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Data="@(teamtask.Where(x => (x.end_time.Ticks > DateTime.Now.Ticks) && (x.team.team_id == tea.team_id)))" TItem="TeamTask" class="vagter-ting">
+                <Columns>
+                    <RadzenDataGridColumn TItem="TeamTask" Property="teamtask.description" Title="Beskrivelse" />
+                    <RadzenDataGridColumn TItem="TeamTask" Property="start_time" Title="Start tidspunkt" />
+                    <RadzenDataGridColumn TItem="TeamTask" Property="end_time" Title="Slut tidspunkt" />
+                    <RadzenDataGridColumn TItem="TeamTask" Property="teamtask_id" Title="Frigiv vagt" Width="85px" Filterable="false" Sortable="false">
+                        <Template Context="teamtask">
+                            <RadzenButton Icon="delete_forever" Click=@(args => OnRelease(teamtask)) />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+    </div>
+</EditForm>
+
+
+
+@if (AvailableTeamtasksDialogOpen)
+{
+    <AvailableTeamtasks tea="@tea" OnClose="@((args)=> OnAvailableTeamtasksDialogClose(args.Item1,args.Item2))"></AvailableTeamtasks>
+}
+
+@if (TeamInfoDialogOpen)
+{
+    <TeamInfo tea="@tea" OnClose="@OnTeamInfoDialogClose"></TeamInfo>
+}
+
+
+
+@code {
+
+    [Parameter] public Team tea { get; set; }
+    RadzenDataGrid<TeamTask> grid;
+    public List<TeamTask> teamtask;
+
+    protected override async Task OnInitializedAsync()
+    {
+        teamtask = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
+    }
+
+
+    // Kode til Available Teamtasks Modal Dialog
+    public bool AvailableTeamtasksDialogOpen { get; set; }
+
+    public void OpenAvailableTeamtasksDialog()
+    {
+        AvailableTeamtasksDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnAvailableTeamtasksDialogClose(bool accepted, TeamTask task)
+    {
+        teamtask.Add(task);
+        tea.teamtasks.Add(task);
+        grid.Reload();
+        AvailableTeamtasksDialogOpen = false;
+        StateHasChanged();
+    }
+
+    // Kode til TeamInfo Modal Dialog
+    public bool TeamInfoDialogOpen { get; set; }
+
+    public void OpenTeamInfoDialog()
+    {
+        TeamInfoDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnTeamInfoDialogClose(bool accepted)
+    {
+        TeamInfoDialogOpen = false;
+        StateHasChanged();
+    }
+    public async void OnRelease(TeamTask tt)
+    {
+        teamtask.Remove(tt);
+        tt.team = tea;
+        await Http.PostAsJsonAsync<TeamTask>("api/method/deassignteamtask", tt);
+        tt.taken = false;
+        tt.team = new Team();
+        await grid.Reload();
+    }
+    public void ReloadPage()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+
+}

@@ -1,0 +1,65 @@
+﻿@inject HttpClient Http
+@using vagtplanen.Shared.Models
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle team opgaver</h3>
+            </div>
+            <div class="modal-body">
+                @if (teamtask== null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Data="@teamtask" TItem="TeamTask">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="TeamTask" Property="teamtask_id" Title="ID" Width="70px" />
+                            <RadzenDataGridColumn TItem="TeamTask" Property="description" Title="Beskrivelse" />
+                            <RadzenDataGridColumn TItem="TeamTask" Property="people_needed" Title="Personer" />
+                             <RadzenDataGridColumn TItem="TeamTask" Property="start_time" Title="Starttidspunkt" />
+                              <RadzenDataGridColumn TItem="TeamTask" Property="end_time" Title="Sluttidspunkt" />
+                               <RadzenDataGridColumn TItem="TeamTask" Property="team.name" Title="Taget af">
+                                    <Template Context="teamtask">
+                                        @if (teamtask.taken == true)
+                                        {
+                                            <p>@teamtask.team.name</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Ikke taget</p>
+                                        }
+                                    </Template>
+                                </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public TeamTask[] teamtask;
+
+    protected async override Task OnInitializedAsync()
+    {
+        teamtask = await Http.GetFromJsonAsync<TeamTask[]>("api/teamtask");
+    }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+}

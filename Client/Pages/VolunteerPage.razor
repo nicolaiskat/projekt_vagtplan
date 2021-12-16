@@ -1,0 +1,244 @@
+﻿@using vagtplanen.Shared.Models;
+@using vagtplanen.Client.Components.Volunteer_components;
+@inject HttpClient Http
+@inject NavigationManager uriHelper
+
+<div class="top-row px-3">
+    <button type="button" class="btn btn-primary" id="right" @onclick="@ReloadPage">Log ud</button>
+</div>
+
+<EditForm Model="@vol">
+    <h1>Velkommen @vol.first_name</h1>
+
+    <RadzenCard class="w-6">
+        <div class="row">
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Ledige vagter:</b>
+                        <div>Her kan du se og vælge tilgængelige ledige vagter.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenAvailableShiftsDialog()">Se vagter</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Vagtskema:</b>
+                        <div>Her kan du se, hvem der har taget hvilke vagter:</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenShiftsSchemeDialog()">Se vagtskema</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Alle kuponer:</b>
+                        <div>Her kan du se og købe kuponer.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenAllCouponsDialog()">Se kuponer</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Mine kuponer:</b>
+                        <div>Her kan du se alle dine købte kuponer.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenMyCouponsDialog()">Se mine kuponer</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Personlige oplysninger:</b>
+                        <div>Her kan du se og ændre dine personlige oplysninger.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenVolunteerInfoDialog()">Se oplysninger</button>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+    </RadzenCard>
+
+    <div class="shifts">
+        @if (shifts == null)
+        {<p><em>...Loading shifts</em></p>}
+        else
+        {
+            <h2>Mine vagter</h2>
+            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Data="@(shifts.Where(x => (x.end_time.Ticks > DateTime.Now.Ticks) && (x.volunteer.volunteer_id == vol.volunteer_id)))" TItem="Shift" class="vagter-ting">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Shift" Property="task.description" Title="Beskrivelse" />
+                    <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Start tidspunkt" />
+                    <RadzenDataGridColumn TItem="Shift" Property="end_time" Title="Slut tidspunkt" />
+                    <RadzenDataGridColumn TItem="Shift" Property="shift_id" Title="Frigiv vagt" Width="85px" Filterable="false" Sortable="false">
+                        <Template Context="shift">
+                            <RadzenButton Icon="delete_forever" Click=@(args => OnRelease(shift)) />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+    </div>
+</EditForm>
+
+
+@if (AvailableShiftsDialogOpen)
+{
+    <AvailableShifts vol="@vol" OnClose="@((args)=> OnAvailableShiftsDialogClose(args.Item1,args.Item2))"></AvailableShifts>
+}
+
+@if (AllCouponsDialogOpen)
+{
+    <AllCoupons vol=@vol OnClose="@OnAllCouponsDialogClose"></AllCoupons>
+}
+
+@if (MyCouponsDialogOpen)
+{
+    <MyCoupons vol="@vol" OnClose="@OnMyCouponsDialogClose"></MyCoupons>
+}
+
+@if (ShiftsSchemeDialogOpen)
+{
+    <ShiftsScheme vol="@vol" OnClose="@OnShiftsSchemeDialogClose"></ShiftsScheme>
+}
+@if (VolunteerInfoDialogOpen)
+{
+    <VolunteerInfo vol="@vol" OnClose="@OnVolunteerInfoDialogClose"></VolunteerInfo>
+}
+
+@code {
+
+    [Parameter] public Volunteer vol { get; set; }
+    RadzenDataGrid<Shift> grid;
+    public List<Shift> shifts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
+    }
+
+
+
+    // Kode til AvailableShifts Modal Dialog
+    public bool AvailableShiftsDialogOpen { get; set; }
+
+    public void OpenAvailableShiftsDialog()
+    {
+        AvailableShiftsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnAvailableShiftsDialogClose(bool accepted, Shift s)
+    {
+        if(s.shift_id != 0)
+        {
+            shifts.Add(s);
+            vol.shifts.Add(s);
+            grid.Reload();
+        }
+        AvailableShiftsDialogOpen = accepted;
+        StateHasChanged();
+    }
+
+    // Kode til AllCoupons Modal Dialog
+    public bool AllCouponsDialogOpen { get; set; }
+
+    public void OpenAllCouponsDialog()
+    {
+        AllCouponsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnAllCouponsDialogClose(bool accepted)
+    {
+        AllCouponsDialogOpen = false;
+        StateHasChanged();
+    }
+
+
+    // Kode til MyCoupons Modal Dialog
+    public bool MyCouponsDialogOpen { get; set; }
+
+    public void OpenMyCouponsDialog()
+    {
+        MyCouponsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnMyCouponsDialogClose(bool accepted)
+    {
+        MyCouponsDialogOpen = false;
+        StateHasChanged();
+    }
+
+    // Kode til ShiftsScheme Modal Dialog
+    public bool ShiftsSchemeDialogOpen { get; set; }
+
+    public void OpenShiftsSchemeDialog()
+    {
+        ShiftsSchemeDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnShiftsSchemeDialogClose(bool accepted)
+    {
+        ShiftsSchemeDialogOpen = false;
+        grid.Reload();
+        StateHasChanged();
+    }
+
+    // Kode til AvailableShifts Modal Dialog
+    public bool VolunteerInfoDialogOpen { get; set; }
+
+    public void OpenVolunteerInfoDialog()
+    {
+        VolunteerInfoDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnVolunteerInfoDialogClose(bool accepted)
+    {
+        VolunteerInfoDialogOpen = false;
+        StateHasChanged();
+    }
+
+    public async void OnRelease(Shift s)
+    {
+        shifts.Remove(s);
+        s.volunteer = vol;
+        try
+        {
+            await Http.PostAsJsonAsync<Shift>($"api/method/deassignshift", s);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+        s.taken = false;
+        s.volunteer = new Volunteer();
+        await grid.Reload();
+    }
+
+    public void ReloadPage()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+
+    }

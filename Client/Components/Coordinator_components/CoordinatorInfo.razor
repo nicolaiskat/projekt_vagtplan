@@ -1,0 +1,112 @@
+﻿@inject HttpClient Http
+@inject NavigationManager uriHelper
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Her kan du rette i dine oplysninger.</h3>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@coor">
+                    <DataAnnotationsValidator />
+                    <div class="form-group ">
+                        <h5>Du vil automatisk blive logget ud, når du gemmer dine nye oplysninger.</h5>
+                        <div>
+                            <label>Fornavn:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.first_name" />
+                                <ValidationMessage For="@(() => coor.first_name)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Efternavn:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.last_name" />
+                                <ValidationMessage For="@(() => coor.last_name)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Mobilnummer:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.mobile" />
+                                <ValidationMessage For="@(() => coor.mobile)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Email:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.email" />
+                                <ValidationMessage For="@(() => coor.email)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Adresse:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.address" />
+                                <ValidationMessage For="@(() => coor.address)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>CPR-nummer:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.cpr" />
+                                <ValidationMessage For="@(() => coor.cpr)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div>
+                            <label>Køn:</label>
+                            <div>
+                                <InputText @bind-Value="@coor.gender" />
+                                <ValidationMessage For="@(() => coor.gender)" />
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Gem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Coordinator coor { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        await Http.PutAsJsonAsync<Coordinator>("api/coordinator", coor);
+        await OnClose.InvokeAsync(true);
+        Reload();
+    }
+
+
+    public void Reload()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+}

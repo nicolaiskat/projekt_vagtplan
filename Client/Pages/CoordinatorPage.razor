@@ -1,0 +1,333 @@
+﻿@using vagtplanen.Shared.Models;
+@using vagtplanen.Client.Components.Coordinator_components;
+@inject HttpClient Http
+@inject NavigationManager uriHelper
+
+<div class="top-row px-3">
+    <button type="button" class="btn btn-primary" id="right" @onclick="@Reload">Log ud</button>
+</div>
+
+<EditForm Model="@coor">
+    <h1>Velkommen @coor.first_name</h1>
+
+    <RadzenCard class="w-6">
+        <div class="row">
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Frivillige:</b>
+                        <div>Her kan du se eksisterende og oprette nye frivillige.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="OpenSeeVolunteersDialog">Se frivillige</button>
+                        <button class="btn btn-success" @onclick="OpenCreateVolunteersDialog">Opret frivillige</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Teams:</b>
+                        <div>Her kan du se eksisterende og oprette nye teams.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="OpenSeeTeamsDialog">Se teams</button>
+                        <button class="btn btn-success" @onclick="OpenCreateTeamsDialog">Opret teams</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Vagter:</b>
+                        <div>Her kan du se eksisterende og oprette nye vagter.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="OpenSeeShiftsDialog">Se vagter</button>
+                        <button class="btn btn-success" @onclick="OpenCreateShiftsDialog">Opret vagter</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Teamopgaver:</b>
+                        <div>Her kan du se eksisterende og oprette nye teamopgaver.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="OpenSeeTeamtaskDialog">Se teamopgaver</button>
+                        <button class="btn btn-success" @onclick="OpenCreateTeamtaskDialog">Opret teamopgaver</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Kuponer:</b>
+                        <div>Her kan du se eksisterende og oprette nye kuponer.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="OpenSeeCouponsDialog">Se kuponer</button>
+                        <button class="btn btn-success" @onclick="OpenCreateCouponDialog">Opret kuponer</button>
+                    </div>
+                </div>
+            </RadzenCard>
+
+            <RadzenCard class="w-7">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>Personlige oplysninger:</b>
+                        <div>Her kan du se og ændre dine personlige oplysninger.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success" @onclick="() => OpenCoordinatorInfoDialog()">Se oplysninger</button>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+    </RadzenCard>
+</EditForm>
+
+@*SHIFTS*@
+@if (SeeShiftsDialogOpen)
+{
+    <SeeTasks OnClose="@OnSeeShiftsDialogClose"></SeeTasks>
+}
+
+@if (CreateShiftsDialogOpen)
+{
+    <CreateShifts OnClose="@OnCreateShiftsDialogClose"></CreateShifts>
+}
+
+
+@*VOLUNTEERS*@
+@if (SeeVolunteersDialogOpen)
+{
+    <SeeVolunteers OnClose="@OnSeeVolunteersDialogClose"></SeeVolunteers>
+}
+
+@if (CreateVolunteersDialogOpen)
+{
+    <CreateVolunteers OnClose="@OnCreateVolunteersDialogClose"></CreateVolunteers>
+}
+
+@*TEAMS*@
+@if (SeeTeamsDialogOpen)
+{
+    <SeeTeams OnClose="@OnSeeTeamsDialogClose"></SeeTeams>
+}
+@if(CreateTeamsDialogOpen)
+{
+    <CreateTeams OnClose="@OnCreateTeamsDialogClose"></CreateTeams>
+}
+
+@*TEAMTASK*@
+
+@if (SeeTeamtaskDialogOpen)
+{
+    <SeeTeamtask OnClose="@OnSeeTeamtaskDialogClose"></SeeTeamtask>
+}
+@if (CreateTeamtaskDialogOpen)
+{
+    <CreateTeamtask OnClose="@OnCreateTeamtaskDialogClose"></CreateTeamtask>
+}
+
+
+@*COUPONS*@
+@if (CreateCouponDialogOpen)
+{
+    <CreateCoupon OnClose="@OnCreateCouponDialogClose"></CreateCoupon>
+}
+@if (SeeCouponsDialogOpen)
+{
+    <SeeCoupons OnClose="@OnSeeCouponsDialogClose"></SeeCoupons>
+}
+
+@if (CoordinatorInfoDialogOpen)
+{
+    <CoordinatorInfo coor="@coor" OnClose="@OnCoordinatorInfoDialogClose"></CoordinatorInfo>
+}
+
+
+
+
+@code {
+    [Parameter] public Coordinator coor { get; set; }
+
+    // Kode til SeeShifts Modal Dialog
+    public bool SeeShiftsDialogOpen { get; set; }
+
+    public void OpenSeeShiftsDialog()
+    {
+        SeeShiftsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnSeeShiftsDialogClose(bool accepted)
+    {
+        SeeShiftsDialogOpen = false;
+        StateHasChanged();
+    }
+
+
+    // Kode til CreateShifts Modal Dialog
+    public bool CreateShiftsDialogOpen { get; set; }
+
+    public void OpenCreateShiftsDialog()
+    {
+        CreateShiftsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnCreateShiftsDialogClose(bool accepted)
+    {
+        CreateShiftsDialogOpen = false;
+        StateHasChanged();
+    }
+
+
+    // Kode til SeeVolunteers Modal Dialog
+    public bool SeeVolunteersDialogOpen { get; set; }
+
+    public void OpenSeeVolunteersDialog()
+    {
+        SeeVolunteersDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnSeeVolunteersDialogClose(bool accepted)
+    {
+        SeeVolunteersDialogOpen = false;
+        StateHasChanged();
+    }
+
+    // Kode til CreateVolunteers Modal Dialog
+    public bool CreateVolunteersDialogOpen { get; set; }
+
+    public void OpenCreateVolunteersDialog()
+    {
+        CreateVolunteersDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnCreateVolunteersDialogClose(bool accepted)
+    {
+        CreateVolunteersDialogOpen = false;
+        StateHasChanged();
+    }
+
+    // Kode til CreateTeams Modal Dialog
+    public bool CreateTeamsDialogOpen { get; set; }
+
+    public void OpenCreateTeamsDialog()
+    {
+        CreateTeamsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnCreateTeamsDialogClose(bool accepted)
+    {
+        CreateTeamsDialogOpen = false;
+        StateHasChanged();
+    }
+
+     // Kode til SeeTeams Modal Dialog
+    public bool SeeTeamsDialogOpen { get; set; }
+
+    public void OpenSeeTeamsDialog()
+    {
+        SeeTeamsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnSeeTeamsDialogClose(bool accepted)
+    {
+        SeeTeamsDialogOpen = false;
+        StateHasChanged();
+    }
+    
+    // Kode til CreateTeamtask Modal Dialog
+    public bool CreateTeamtaskDialogOpen { get; set; }
+
+    public void OpenCreateTeamtaskDialog()
+    {
+        CreateTeamtaskDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnCreateTeamtaskDialogClose(bool accepted)
+    {
+        CreateTeamtaskDialogOpen = false;
+        StateHasChanged();
+    }
+    
+    // Kode til SeeTeamtask Modal Dialog
+    public bool SeeTeamtaskDialogOpen { get; set; }
+
+    public void OpenSeeTeamtaskDialog()
+    {
+        SeeTeamtaskDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnSeeTeamtaskDialogClose(bool accepted)
+    {
+        SeeTeamtaskDialogOpen = false;
+        StateHasChanged();
+    }
+
+    // Kode til CreateCoupon Modal Dialog
+    public bool CreateCouponDialogOpen { get; set; }
+
+    public void OpenCreateCouponDialog()
+    {
+        CreateCouponDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnCreateCouponDialogClose(bool accepted)
+    {
+        CreateCouponDialogOpen = false;
+        StateHasChanged();
+    }
+
+    // Kode til CoordinatorInfo Modal Dialog
+    public bool CoordinatorInfoDialogOpen { get; set; }
+
+    public void OpenCoordinatorInfoDialog()
+    {
+        CoordinatorInfoDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnCoordinatorInfoDialogClose(bool accepted)
+    {
+        CoordinatorInfoDialogOpen = false;
+        StateHasChanged();
+    }
+    // Kode til SeeCoupons Modal Dialog
+    public bool SeeCouponsDialogOpen { get; set; }
+
+    public void OpenSeeCouponsDialog()
+    {
+        SeeCouponsDialogOpen = true;
+        StateHasChanged();
+    }
+
+    public void OnSeeCouponsDialogClose(bool accepted)
+    {
+        SeeCouponsDialogOpen = false;
+        StateHasChanged();
+    }
+
+
+
+    public void Reload()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+    }
+}

@@ -1,0 +1,65 @@
+﻿@inject HttpClient Http
+@using System;
+@using System.Globalization;
+
+
+    <div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Se alle besatte vagter</h3>
+                </div>
+                <div class="modal-body">
+                    @if (shifts == null)
+                    {
+                        <p><em>Loading...</em></p>
+                    }
+                    else
+                    {
+                        <EditForm Model="@vol">
+                            <RadzenDataGrid AllowFiltering="false" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            Data="@(shifts.Where(x => x.taken == true))" TItem="Shift">
+                                <Columns>
+                                    <RadzenDataGridColumn TItem="Shift" Property="volunter.first_name" Title="Navn">
+                                        <Template Context="shift">
+                                            <p>@t.ToTitleCase(shift.volunteer.first_name) @t.ToTitleCase(shift.volunteer.last_name)</p>
+                                        </Template>
+                                    </RadzenDataGridColumn>
+
+                                    <RadzenDataGridColumn TItem="Shift" Property="task.description" Title="Beskrivelse" />
+                                    <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Starttidspunkt" />
+                                    <RadzenDataGridColumn TItem="Shift" Property="end_time" Title="Sluttidspunkt" />
+                                </Columns>
+                            </RadzenDataGrid>
+                        </EditForm>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @code {
+
+        [Parameter]
+        public Volunteer vol { get; set; }
+
+        public Shift[] shifts;
+
+        TextInfo t = new CultureInfo("en-US", false).TextInfo;
+
+        protected async override Task OnInitializedAsync()
+        {
+            shifts = await Http.GetFromJsonAsync<Shift[]>("api/shift");
+        }
+
+        [Parameter]
+        public EventCallback<bool> OnClose { get; set; }
+
+        private Task ModalOk()
+        {
+            return OnClose.InvokeAsync(true);
+        }
+    }

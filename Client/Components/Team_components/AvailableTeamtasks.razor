@@ -1,0 +1,79 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime 
+@using vagtplanen.Shared.Models
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alle ledige teamopgaver</h3>
+            </div>
+            <div class="modal-body">
+                @if (tasks == null)
+                {
+                    <p>Loading...</p>
+                }
+            else
+                {
+            <EditForm Model="@tea">
+                <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                @ref="grid" Data="@tasks.Where(x => x.locked == false && x.taken == false && x.end_time.Ticks > DateTime.Now.Ticks)" TItem="TeamTask">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="TeamTask" Property="description" Title="Beskrivelse" />
+                        <RadzenDataGridColumn TItem="TeamTask" Property="start_time" Title="Starttidspunkt" />
+                        <RadzenDataGridColumn TItem="TeamTask" Property="end_time" Title="Sluttidspunkt" />
+                        <RadzenDataGridColumn TItem="TeamTask" Property="people_needed" Title="Personer" />
+                        <RadzenDataGridColumn TItem="TeamTask" Property="locked" Title="Tag opgave">
+                            <Template Context="task">
+                                <RadzenButton Icon="check_circle" Click=@(args => OnTake(task)) />
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </EditForm>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<TeamTask> tasks = new();
+    public RadzenDataGrid<TeamTask> grid;
+    public TeamTask takenTask = new();
+    public TaskClass task = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        tasks = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
+    }
+
+    [Parameter]
+    public EventCallback<(bool, TeamTask)> OnClose { get; set; }
+
+    [Parameter]
+    public Team tea { get; set; }
+
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync((true, takenTask));
+    }
+
+    async void OnTake(TeamTask task)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Du er ved at tage en teamopgave. Tryk OK for at bekræfte.");
+        if (confirmed)
+        {
+            task.taken = true;
+            takenTask = task;
+            takenTask.team = tea;
+            await Http.PostAsJsonAsync($"api/method/assignteamtask", takenTask);
+            await grid.Reload();
+        }
+    }
+}

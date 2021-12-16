@@ -1,0 +1,117 @@
+﻿@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+@using vagtplanen.Shared.Models 
+
+
+<div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Opret frivillig</h3>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="@create">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <div>
+                            <label>Fornavn:</label>
+                            <div>
+                                <InputText @bind-Value="@create.first_name" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Efternavn:</label>
+                            <div>
+                                <InputText @bind-Value="@create.last_name" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Mobilnummer:</label>
+                            <div>
+                                <InputText @bind-Value="@create.mobile" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Email:</label>
+                            <div>
+                                <InputText @bind-Value="@create.email" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Adresse:</label>
+                            <div>
+                                <InputText @bind-Value="@create.address" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Køn:</label>
+                            <div>
+                                <InputText @bind-Value="@create.gender" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Cpr-nummer:</label>
+                            <div>
+                                <InputText @bind-Value="@create.cpr" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Kode:</label>
+                            <div>
+                                <InputText @bind-Value="@create.password" />
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="@ModalOk">Opret</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public static Volunteer create = new();
+    public List<Skill> skills;
+
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        skills = await Http.GetFromJsonAsync<List<Skill>>("api/skill");
+    }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        await Http.PostAsJsonAsync("api/volunteer", create);
+
+        await JsRuntime.InvokeVoidAsync("alert", "Bekræftelse. Den frivillige er oprettet.");
+
+
+        await OnClose.InvokeAsync(true);
+    }
+}
