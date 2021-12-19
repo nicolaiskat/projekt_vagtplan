@@ -46,13 +46,13 @@
         [Parameter]
         public Volunteer vol { get; set; }
 
-        public Shift[] shifts;
+        public List<Shift> shifts;
 
         TextInfo t = new CultureInfo("en-US", false).TextInfo;
 
         protected async override Task OnInitializedAsync()
         {
-            shifts = await Http.GetFromJsonAsync<Shift[]>("api/shift");
+            shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
         }
 
         [Parameter]

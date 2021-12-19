@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj": {}
+    "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Server/vagtplanen.Server.csproj": {}
   },
   "projects": {
-    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj": {
+    "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj",
+        "projectUniqueName": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj",
         "projectName": "vagtplanen.Client",
-        "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj",
+        "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj",
         "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
-        "outputPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/obj/",
+        "outputPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/nicolaiskat/.config/NuGet/NuGet.Config"
@@ -26,8 +26,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
-                "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
+              "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+                "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
               }
             }
           }
@@ -94,14 +94,14 @@
         }
       }
     },
-    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj": {
+    "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Server/vagtplanen.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj",
+        "projectUniqueName": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Server/vagtplanen.Server.csproj",
         "projectName": "vagtplanen.Server",
-        "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/vagtplanen.Server.csproj",
+        "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Server/vagtplanen.Server.csproj",
         "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
-        "outputPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Server/obj/",
+        "outputPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/nicolaiskat/.config/NuGet/NuGet.Config"
@@ -116,11 +116,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj": {
-                "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/vagtplanen.Client.csproj"
+              "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj": {
+                "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj"
               },
-              "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
-                "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
+              "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+                "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
               }
             }
           }
@@ -186,14 +186,14 @@
         }
       }
     },
-    "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+    "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
+        "projectUniqueName": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
         "projectName": "vagtplanen.Shared",
-        "projectPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
+        "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
         "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
-        "outputPath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/obj/",
+        "outputPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/nicolaiskat/.config/NuGet/NuGet.Config"

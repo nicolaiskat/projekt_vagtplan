@@ -9,3 +9,14 @@
 /Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.dll
 /Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/obj/Debug/net5.0/ref/vagtplanen.Shared.dll
 /Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.pdb
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/bin/Debug/net5.0/vagtplanen.Shared.deps.json
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/bin/Debug/net5.0/vagtplanen.Shared.dll
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/bin/Debug/net5.0/ref/vagtplanen.Shared.dll
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/bin/Debug/net5.0/vagtplanen.Shared.pdb
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.AssemblyInfoInputs.cache
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.AssemblyInfo.cs
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.csproj.CoreCompileInputs.cache
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.dll
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/ref/vagtplanen.Shared.dll
+/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.pdb

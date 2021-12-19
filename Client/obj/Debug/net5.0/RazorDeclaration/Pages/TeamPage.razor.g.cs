@@ -13,105 +13,105 @@ namespace vagtplanen.Client.Pages
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 1 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 2 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using System.Net.Http.Json;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 3 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 4 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 5 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 6 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 7 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 8 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 9 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using vagtplanen.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 10 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using vagtplanen.Client.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 11 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Radzen;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 12 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 12 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Radzen.Blazor;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 1 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/Pages/TeamPage.razor"
+#line 1 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/TeamPage.razor"
 using vagtplanen.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/Pages/TeamPage.razor"
+#line 2 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/TeamPage.razor"
 using vagtplanen.Client.Components.Volunteer_components;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/Pages/TeamPage.razor"
+#line 3 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/TeamPage.razor"
 using vagtplanen.Client.Components.Team_components;
 
 #line default
@@ -125,7 +125,7 @@ using vagtplanen.Client.Components.Team_components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 79 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/Pages/TeamPage.razor"
+#line 79 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/TeamPage.razor"
        
 
     [Parameter] public Team tea { get; set; }

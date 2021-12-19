@@ -13,85 +13,92 @@ namespace vagtplanen.Client.Components.Coordinator_components
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 1 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 2 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using System.Net.Http.Json;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 3 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 4 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 5 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 6 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 7 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 8 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 9 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using vagtplanen.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 10 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using vagtplanen.Client.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 11 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Radzen;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 12 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 12 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Radzen.Blazor;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 4 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Components/Coordinator_components/SeeVolunteers.razor"
+using vagtplanen.Shared.Models;
 
 #line default
 #line hidden
@@ -104,28 +111,26 @@ using Radzen.Blazor;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 58 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/Components/Coordinator_components/SeeVolunteers.razor"
-        public Volunteer[] volunteers;
-
-    private async void deleteControl(Volunteer vol)
-    {
-        await deleteVolunteer(vol);
-        uriHelper.NavigateTo(uriHelper.Uri);
-    }
+#line 58 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Components/Coordinator_components/SeeVolunteers.razor"
+       
+    public List<Volunteer> volunteers;
+    RadzenDataGrid<Volunteer> grid;
 
     protected async Task deleteVolunteer(Volunteer vol)
     {
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Er du sikker på, at du vil slette den frivilliges oplysninger?");
         if (confirmed)
         {
+            await Http.PostAsJsonAsync($"api/method/deassignskill/{vol.volunteer_id}", vol.skills);
             await Http.DeleteAsync($"api/volunteer/{vol.volunteer_id}");
-            await ModalOk();
+            volunteers.Remove(vol);
+            await grid.Reload();
         }
     }
 
     protected async override Task OnInitializedAsync()
     {
-        volunteers = await Http.GetFromJsonAsync<Volunteer[]>("api/volunteer");
+        volunteers = await Http.GetFromJsonAsync<List<Volunteer>>("api/volunteer");
     }
 
     [Parameter]
@@ -135,7 +140,7 @@ using Radzen.Blazor;
     private Task ModalOk()
     {
         return OnClose.InvokeAsync(true);
-    } 
+    }
 
 #line default
 #line hidden

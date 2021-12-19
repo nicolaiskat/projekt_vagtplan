@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iRVIfzC0sNPGg0kBkHmQKevH0awTuURo5uVwm+cszsaYLihgiWdjR24MpaXkLYMD6LvJj6zj/8iaEcFl4eJ2hg==",
+  "dgSpecHash": "8a7XNKu/TtlUdIkWxffGHeB6RqZdYpgnvXpiJOqZ1EvL/jDEHwnz4ouxNmiBA4Wrj5uc/ui4vZUwxeEqHBHjNw==",
   "success": true,
-  "projectFilePath": "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
+  "projectFilePath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

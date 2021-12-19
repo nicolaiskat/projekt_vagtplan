@@ -1,6 +1,7 @@
 ﻿@inject HttpClient Http
 @inject NavigationManager uriHelper
 @inject IJSRuntime JsRuntime
+@using vagtplanen.Shared.Models 
 
 <div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -15,7 +16,7 @@
                 }
                 else
                 {
-                <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                 Data="@volunteers" TItem="Volunteer">
                     <Columns>
                         <RadzenDataGridColumn TItem="Volunteer" Property="volunteer_id" Title="ID" Width="70px" />
@@ -27,20 +28,19 @@
                         <RadzenDataGridColumn TItem="Volunteer" Property="hours" Title="Antal timer" />
                         <RadzenDataGridColumn TItem="Volunteer" Property="delete" Title="Slet frivillig" Width="60px" Filterable="false" Sortable="false">
                             <Template Context="volunteer">
-                                <RadzenButton Icon="highlight_off" Click=@(args => deleteControl(volunteer)) />
+                                <RadzenButton Icon="highlight_off" Click=@(args => deleteVolunteer(volunteer)) />
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Volunteer" Title="Skills" Width="200px" Filterable="false" Sortable="false">
                             <Template Context="volunteer">
                                 @if (volunteer.skills.Count() == 0)
                                 {
-                                <RadzenDropDown AllowClear="true" TValue="string" Class="w-100"
-                                                Placeholder="Ingen skills" Data=@volunteer.skills TextProperty="name" ValueProperty="skill_id" />
+                                <RadzenDropDown TValue="Skill" Placeholder="Ingen skills" Data=@volunteer.skills/>
                                 }
                                 else
                                 {
-                                <RadzenDropDown AllowClear="true" TValue="string" Class="w-100"
-                                                Placeholder="Se skills" Data=@volunteer.skills TextProperty="name" ValueProperty="skill_id" />
+                                <RadzenDropDown TValue="Skill" Placeholder="Se skills" Data=@volunteer.skills
+                                                TextProperty="name" ValueProperty="skill_id" />
                                 }
                             </Template>
                         </RadzenDataGridColumn>
@@ -55,27 +55,25 @@
     </div>
 </div>
 
-@code { public Volunteer[] volunteers;
-
-    private async void deleteControl(Volunteer vol)
-    {
-        await deleteVolunteer(vol);
-        uriHelper.NavigateTo(uriHelper.Uri);
-    }
+@code {
+    public List<Volunteer> volunteers;
+    RadzenDataGrid<Volunteer> grid;
 
     protected async Task deleteVolunteer(Volunteer vol)
     {
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Er du sikker på, at du vil slette den frivilliges oplysninger?");
         if (confirmed)
         {
+            await Http.PostAsJsonAsync($"api/method/deassignskill/{vol.volunteer_id}", vol.skills);
             await Http.DeleteAsync($"api/volunteer/{vol.volunteer_id}");
-            await ModalOk();
+            volunteers.Remove(vol);
+            await grid.Reload();
         }
     }
 
     protected async override Task OnInitializedAsync()
     {
-        volunteers = await Http.GetFromJsonAsync<Volunteer[]>("api/volunteer");
+        volunteers = await Http.GetFromJsonAsync<List<Volunteer>>("api/volunteer");
     }
 
     [Parameter]
@@ -85,4 +83,5 @@
     private Task ModalOk()
     {
         return OnClose.InvokeAsync(true);
-    } }
+    }
+}

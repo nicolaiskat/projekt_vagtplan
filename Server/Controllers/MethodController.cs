@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using vagtplanen.Server.Services;
@@ -153,11 +154,14 @@ namespace vagtplanen.Server.Controllers
         }
 
         [HttpPost("assignskill/{volunteer_id}")]
-        public async Task AssignSkill(int volunteer_id, Skill skill)
+        public async Task AssignSkill(int volunteer_id, List<Skill> skills)
         {
             try
             {
-                await _service.AssignSkill(volunteer_id, skill);
+                foreach (var skill in skills)
+                {
+                    await _service.AssignSkill(volunteer_id, skill);
+                }
             }
             catch (Exception ex)
             {
@@ -167,11 +171,14 @@ namespace vagtplanen.Server.Controllers
         }
 
         [HttpPost("deassignskill/{volunteer_id}")]
-        public async Task DeAssignSkill(int volunteer_id, Skill skill)
+        public async Task DeAssignSkill(int volunteer_id, List<Skill> skills)
         {
             try
             {
-                await _service.DeAssignSkill(volunteer_id, skill);
+                foreach (var skill in skills)
+                {
+                    await _service.DeAssignSkill(volunteer_id, skill);
+                }
             }
             catch (Exception ex)
             {

@@ -231,6 +231,7 @@
         {
             Console.WriteLine(ex);
         }
+        vol.shifts.Remove(s);
         s.taken = false;
         s.volunteer = new Volunteer();
         await grid.Reload();

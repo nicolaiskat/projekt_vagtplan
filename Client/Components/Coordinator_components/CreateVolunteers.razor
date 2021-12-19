@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Http
 @inject IJSRuntime JsRuntime
-@using vagtplanen.Shared.Models 
+@using vagtplanen.Shared.Models
 
 
 <div class="modal fade show" id="myModal" style="display:block;" aria-modal="true" role="dialog">
@@ -11,7 +11,6 @@
                 <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
             </div>
             <div class="modal-body">
-
                 <EditForm Model="@create">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
@@ -80,6 +79,20 @@
                         </div>
                     </div>
                 </EditForm>
+                @if (skills != null)
+                {
+                    <div class="form-group">
+                        <div>
+                            <label>Vælg skills:</label>
+                            <div>
+                                @foreach (Skill s in skills)
+                                {
+                                    @s.name <input type="checkbox" @bind="s.isChosen"> <br/>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" @onclick="@ModalOk">Opret</button>
@@ -89,15 +102,19 @@
 </div>
 
 @code {
-
-    public static Volunteer create = new();
+    public Volunteer create = new();
     public List<Skill> skills;
+
 
     [Parameter] public EventCallback<bool> OnClose { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         skills = await Http.GetFromJsonAsync<List<Skill>>("api/skill");
+        foreach (var s in skills)
+        {
+            s.isChosen = false;
+        }
     }
 
     private Task ModalCancel()
@@ -108,10 +125,17 @@
     private async Task ModalOk()
     {
         await Http.PostAsJsonAsync("api/volunteer", create);
-
-        await JsRuntime.InvokeVoidAsync("alert", "Bekræftelse. Den frivillige er oprettet.");
-
-
         await OnClose.InvokeAsync(true);
+
+        create.skills = new();
+        foreach (var s in skills)
+        {
+            if (s.isChosen)
+                create.skills.Add(s);
+        };
+
+        Volunteer createdVol = await Http.GetFromJsonAsync<Volunteer>($"api/volunteer/{create.email}");
+        await Http.PostAsJsonAsync($"api/method/assignskill/{createdVol.volunteer_id}", create.skills);
+        await JsRuntime.InvokeVoidAsync("alert", "Bekræftelse. Den frivillige er oprettet.");
     }
 }

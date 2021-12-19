@@ -155,8 +155,8 @@ namespace vagtplanen.Server.Services
         {
             using (var conn = OpenConnection(_connectionString))
             {
-                var query = @"CALL assign_skill(@vol, @skill, @name)";
-                var values = new { vol = volunteer_id, skill = s.skill_id, name = s.name };
+                var query = @"CALL assign_skill(@vol, @skill, 'volunteer')";
+                var values = new { vol = volunteer_id, skill = s.skill_id};
                 await conn.ExecuteAsync(query, values);
             }
         }
@@ -165,8 +165,8 @@ namespace vagtplanen.Server.Services
         {
             using (var conn = OpenConnection(_connectionString))
             {
-                var query = @"CALL deassign_skill(@vol, @skill, @name)";
-                var values = new { vol = volunteer_id, skill = s.skill_id, name = s.name };
+                var query = @"CALL deassign_skill(@vol, @skill)";
+                var values = new { vol = volunteer_id, skill = s.skill_id};
                 await conn.ExecuteAsync(query, values);
             }
         }

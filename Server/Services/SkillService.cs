@@ -28,59 +28,17 @@ namespace vagtplanen.Server.Services
             return conn;
         }
 
-        //Get method for alle volunteers
         public IEnumerable<Skill> Get()
         {
-            //Åbner forbindelsen til databasen
-            //Alt kode i denne 'using' kan forbbindes med databasen
             using (var conn = OpenConnection(_connectionString))
             {
                 //Query gemmes som string
-                var query = @"select * from all_skills";
+                var query = @"select * from skill";
 
                 //Kører en query 
-                var list = conn.Query<Skill, Team, Volunteer, Skill>(
-                query,
-                (s, t, v) =>
-                {
-                    //Initialiserer 0..* forholdende mellem klasserne
-                    //Og gemmer dataen tilhørende den enkelte skill
-                   
-                    s.teams = new(); s.volunteers = new();
-                    s.teams.Add(t);
-                    s.volunteers.Add(v);
-                    
-
-                    //Retunere hver volunteer og laver en liste ud af det til => var list
-                    return s;
-                },
-                //Værdierne de unikke data query skal bruge til at identificere hver klasse (skal i rækkefølge)
-                //'splitOn:' står som det gør, fordi vi vælger at ændre i splitOn og ikke de andre parametre i 'Query' method fra Dapper
-                splitOn: "skill_id, team_id, volunteer_id");
-
-                //Gruppere data i "list" ud fra hver volunteer
-                var result = list.GroupBy(s => s.skill_id).Select(g =>
-                {
-                    //Starter ved "first" i gruppen
-                    var groupedList = g.First();
-
-                    //Sætter gruppens klasse-lister i grupper, så det kommer ud som arrays pr. liste
-                    groupedList.teams = g.Select(s => s.teams.Single()).ToList();
-                    groupedList.volunteers = g.Select(s => s.volunteers.Single()).ToList();
-                   
-
-                    //Fjerner alle objekter i listerne, som er lig med null (data trimming)
-                    groupedList.teams.RemoveAll(x => x == null);
-                    groupedList.volunteers.RemoveAll(x => x == null);
-                  
-
-                    //Returnerer grupperet liste
-                    return groupedList;
-                });
-                //Returnerer IEnumerable<Skill>
-                return result;
+                var list = conn.Query<Skill>(query);
+                return list;
             }
-
         }
 
         // Method til at hente enkelt volunteer

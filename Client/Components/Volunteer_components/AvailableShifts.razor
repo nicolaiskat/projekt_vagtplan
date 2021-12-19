@@ -17,7 +17,7 @@
                 {
                     <EditForm Model="@vol">
                         <RadzenDataGrid AllowFiltering="true" @ref="grid" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                        Data="@MyShifts()" TItem="Shift">
+                                        Data="@Available()" TItem="Shift">
                             <Columns>
                                 <RadzenDataGridColumn TItem="Shift" Property="task.description" Title="Beskrivelse" />
                                 <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Starttidspunkt" />
@@ -51,7 +51,7 @@
         shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
     }
 
-    public List<Shift> MyShifts()
+    public List<Shift> Available()
     {
         var allShifts = shifts;
         var myShifts = vol.shifts;
@@ -64,11 +64,11 @@
         {
             foreach (Shift myShift in myShifts)
             {
-                if (shift.start_time.Ticks < myShift.start_time.Ticks && shift.end_time.Ticks > myShift.start_time.Ticks)
+                if (shift.start_time.Ticks <= myShift.start_time.Ticks && shift.end_time.Ticks >= myShift.start_time.Ticks)
                 {
                     available = false;
                 }
-                if (shift.start_time.Ticks < myShift.end_time.Ticks && shift.end_time.Ticks > myShift.end_time.Ticks)
+                if (shift.start_time.Ticks <= myShift.end_time.Ticks && shift.end_time.Ticks >= myShift.end_time.Ticks)
                 {
                     available = false;
                 }
@@ -82,7 +82,7 @@
                 available = true;
             }
         }
-        return availableShifts.Where(x => x.taken == false && (x.start_time.Ticks > DateTime.Now.Ticks)).ToList();
+        return availableShifts.Where(x => x.taken == false && (x.start_time.Ticks >= DateTime.Now.Ticks)).ToList();
     }
 
     [Parameter]
@@ -106,7 +106,7 @@
             takenShift.volunteer = vol;
             await Http.PostAsJsonAsync($"api/method/assignshift", takenShift);
             await grid.Reload();
-            await OnClose.InvokeAsync((false, takenShift));
+            await OnClose.InvokeAsync((true, takenShift));
         }
     }
 }

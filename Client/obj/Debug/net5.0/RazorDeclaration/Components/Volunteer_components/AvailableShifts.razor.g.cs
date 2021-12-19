@@ -13,84 +13,84 @@ namespace vagtplanen.Client.Components.Volunteer_components
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 1 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 2 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using System.Net.Http.Json;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 3 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 4 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 5 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 6 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 7 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 8 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 9 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using vagtplanen.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 10 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using vagtplanen.Client.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 11 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Radzen;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 12 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/_Imports.razor"
+#line 12 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/_Imports.razor"
 using Radzen.Blazor;
 
 #line default
@@ -104,7 +104,7 @@ using Radzen.Blazor;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 42 "/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/Components/Volunteer_components/AvailableShifts.razor"
+#line 42 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Components/Volunteer_components/AvailableShifts.razor"
        
 
     public List<Shift> shifts;
@@ -117,7 +117,7 @@ using Radzen.Blazor;
         shifts = await Http.GetFromJsonAsync<List<Shift>>("api/shift");
     }
 
-    public List<Shift> MyShifts()
+    public List<Shift> Available()
     {
         var allShifts = shifts;
         var myShifts = vol.shifts;
@@ -130,11 +130,11 @@ using Radzen.Blazor;
         {
             foreach (Shift myShift in myShifts)
             {
-                if (shift.start_time.Ticks < myShift.start_time.Ticks && shift.end_time.Ticks > myShift.start_time.Ticks)
+                if (shift.start_time.Ticks <= myShift.start_time.Ticks && shift.end_time.Ticks >= myShift.start_time.Ticks)
                 {
                     available = false;
                 }
-                if (shift.start_time.Ticks < myShift.end_time.Ticks && shift.end_time.Ticks > myShift.end_time.Ticks)
+                if (shift.start_time.Ticks <= myShift.end_time.Ticks && shift.end_time.Ticks >= myShift.end_time.Ticks)
                 {
                     available = false;
                 }
@@ -148,7 +148,7 @@ using Radzen.Blazor;
                 available = true;
             }
         }
-        return availableShifts.Where(x => x.taken == false && (x.start_time.Ticks > DateTime.Now.Ticks)).ToList();
+        return availableShifts.Where(x => x.taken == false && (x.start_time.Ticks >= DateTime.Now.Ticks)).ToList();
     }
 
     [Parameter]
@@ -172,7 +172,7 @@ using Radzen.Blazor;
             takenShift.volunteer = vol;
             await Http.PostAsJsonAsync($"api/method/assignshift", takenShift);
             await grid.Reload();
-            await OnClose.InvokeAsync((false, takenShift));
+            await OnClose.InvokeAsync((true, takenShift));
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿<StaticWebAssets Version="1.0">
-  <ContentRoot BasePath="/" Path="/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/bin/Debug/net5.0/wwwroot/" />
-  <ContentRoot BasePath="/" Path="/Users/nicolaiskat/Projects/linen/projekt_vagtplan/Client/obj/Debug/net5.0/scopedcss/bundle/" />
+  <ContentRoot BasePath="/" Path="/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/bin/Debug/net5.0/wwwroot/" />
+  <ContentRoot BasePath="/" Path="/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/obj/Debug/net5.0/scopedcss/bundle/" />
   <ContentRoot BasePath="_content/BlazorPro.Spinkit" Path="/Users/nicolaiskat/.nuget/packages/blazorpro.spinkit/1.2.0/build/../staticwebassets/" />
   <ContentRoot BasePath="_content/Radzen.Blazor" Path="/Users/nicolaiskat/.nuget/packages/radzen.blazor/3.13.2/build/../staticwebassets/" />
 </StaticWebAssets>

@@ -17,7 +17,7 @@
                 {
             <EditForm Model="@tea">
                 <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                @ref="grid" Data="@tasks.Where(x => x.locked == false && x.taken == false && x.end_time.Ticks > DateTime.Now.Ticks)" TItem="TeamTask">
+                                @ref="grid" Data="@tasks.Where(x => x.locked == false && x.taken == false && x.start_time.Ticks > DateTime.Now.Ticks)" TItem="TeamTask">
                     <Columns>
                         <RadzenDataGridColumn TItem="TeamTask" Property="description" Title="Beskrivelse" />
                         <RadzenDataGridColumn TItem="TeamTask" Property="start_time" Title="Starttidspunkt" />

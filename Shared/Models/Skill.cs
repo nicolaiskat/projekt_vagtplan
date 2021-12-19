@@ -7,8 +7,6 @@ namespace vagtplanen.Shared.Models
     {
         public int skill_id { get; set; }
         public string name { get; set; }
-
-        public List<Team> teams { get; set; }
-        public List<Volunteer> volunteers { get; set; }
+        public bool isChosen { get; set; }
     }
 }
