@@ -41,13 +41,13 @@
     </RadzenCard>
 
      <div class="teamtask">
-        @if (teamtask == null)
+        @if (teamtasks == null)
         {<p><em>Loading teamtask...</em></p>}
         else
         {
             <h2>Teamets vagter</h2>
             <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            Data="@(teamtask.Where(x => (x.end_time.Ticks > DateTime.Now.Ticks) && (x.team.team_id == tea.team_id)))" TItem="TeamTask" class="vagter-ting">
+                            Data="@(teamtasks.Where(x => (x.end_time.Ticks > DateTime.Now.Ticks) && (x.team.team_id == tea.team_id)))" TItem="TeamTask" class="vagter-ting">
                 <Columns>
                     <RadzenDataGridColumn TItem="TeamTask" Property="teamtask.description" Title="Beskrivelse" />
                     <RadzenDataGridColumn TItem="TeamTask" Property="start_time" Title="Start tidspunkt" />
@@ -81,11 +81,11 @@
 
     [Parameter] public Team tea { get; set; }
     RadzenDataGrid<TeamTask> grid;
-    public List<TeamTask> teamtask;
+    public List<TeamTask> teamtasks;
 
     protected override async Task OnInitializedAsync()
     {
-        teamtask = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
+        teamtasks = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
     }
 
 
@@ -100,10 +100,13 @@
 
     public void OnAvailableTeamtasksDialogClose(bool accepted, TeamTask task)
     {
-        teamtask.Add(task);
-        tea.teamtasks.Add(task);
-        grid.Reload();
-        AvailableTeamtasksDialogOpen = false;
+        if (task != null)
+        {
+            teamtasks.Add(task);
+            tea.teamtasks.Add(task);
+            grid.Reload();
+        }
+        AvailableTeamtasksDialogOpen = accepted;
         StateHasChanged();
     }
 
@@ -121,11 +124,24 @@
         TeamInfoDialogOpen = false;
         StateHasChanged();
     }
+    public TeamTask removedTeamTask = new();
     public async void OnRelease(TeamTask tt)
     {
-        teamtask.Remove(tt);
+        teamtasks.Remove(tt);
+        removedTeamTask.teamtask_id = tt.teamtask_id;
+        removedTeamTask.team = new();
+        removedTeamTask.team.team_id = tea.team_id;
         tt.team = tea;
-        await Http.PostAsJsonAsync<TeamTask>("api/method/deassignteamtask", tt);
+        try
+        {
+            await Http.PostAsJsonAsync<TeamTask>("api/method/deassignteamtask", tt);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        tea.teamtasks.Remove(tt);
         tt.taken = false;
         tt.team = new Team();
         await grid.Reload();

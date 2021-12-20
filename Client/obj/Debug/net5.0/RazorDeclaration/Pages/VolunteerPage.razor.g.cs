@@ -120,7 +120,6 @@ using vagtplanen.Client.Components.Volunteer_components;
 #nullable restore
 #line 127 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/VolunteerPage.razor"
        
-
     [Parameter] public Volunteer vol { get; set; }
     RadzenDataGrid<Shift> grid;
     public List<Shift> shifts;
@@ -214,14 +213,17 @@ using vagtplanen.Client.Components.Volunteer_components;
         VolunteerInfoDialogOpen = false;
         StateHasChanged();
     }
-
+    public Shift removedShift = new();
     public async void OnRelease(Shift s)
     {
         shifts.Remove(s);
+        removedShift.shift_id = s.shift_id;
+        removedShift.volunteer = new();
+        removedShift.volunteer.volunteer_id = vol.volunteer_id;
         s.volunteer = vol;
         try
         {
-            await Http.PostAsJsonAsync<Shift>($"api/method/deassignshift", s);
+            await Http.PostAsJsonAsync<Shift>($"api/method/deassignshift", removedShift);
         }
         catch (Exception ex)
         {
@@ -229,7 +231,7 @@ using vagtplanen.Client.Components.Volunteer_components;
         }
         vol.shifts.Remove(s);
         s.taken = false;
-        s.volunteer = new Volunteer();
+        s.volunteer = new();
         await grid.Reload();
     }
 
@@ -237,8 +239,6 @@ using vagtplanen.Client.Components.Volunteer_components;
     {
         uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
     }
-
-    
 
 #line default
 #line hidden

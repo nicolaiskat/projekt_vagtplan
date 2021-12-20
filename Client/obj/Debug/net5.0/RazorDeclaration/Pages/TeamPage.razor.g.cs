@@ -130,11 +130,11 @@ using vagtplanen.Client.Components.Team_components;
 
     [Parameter] public Team tea { get; set; }
     RadzenDataGrid<TeamTask> grid;
-    public List<TeamTask> teamtask;
+    public List<TeamTask> teamtasks;
 
     protected override async Task OnInitializedAsync()
     {
-        teamtask = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
+        teamtasks = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
     }
 
 
@@ -149,10 +149,13 @@ using vagtplanen.Client.Components.Team_components;
 
     public void OnAvailableTeamtasksDialogClose(bool accepted, TeamTask task)
     {
-        teamtask.Add(task);
-        tea.teamtasks.Add(task);
-        grid.Reload();
-        AvailableTeamtasksDialogOpen = false;
+        if (task != null)
+        {
+            teamtasks.Add(task);
+            tea.teamtasks.Add(task);
+            grid.Reload();
+        }
+        AvailableTeamtasksDialogOpen = accepted;
         StateHasChanged();
     }
 
@@ -170,11 +173,24 @@ using vagtplanen.Client.Components.Team_components;
         TeamInfoDialogOpen = false;
         StateHasChanged();
     }
+    public TeamTask removedTeamTask = new();
     public async void OnRelease(TeamTask tt)
     {
-        teamtask.Remove(tt);
+        teamtasks.Remove(tt);
+        removedTeamTask.teamtask_id = tt.teamtask_id;
+        removedTeamTask.team = new();
+        removedTeamTask.team.team_id = tea.team_id;
         tt.team = tea;
-        await Http.PostAsJsonAsync<TeamTask>("api/method/deassignteamtask", tt);
+        try
+        {
+            await Http.PostAsJsonAsync<TeamTask>("api/method/deassignteamtask", tt);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        tea.teamtasks.Remove(tt);
         tt.taken = false;
         tt.team = new Team();
         await grid.Reload();

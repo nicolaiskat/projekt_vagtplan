@@ -130,11 +130,11 @@ using Radzen.Blazor;
         {
             foreach (Shift myShift in myShifts)
             {
-                if (shift.start_time.Ticks <= myShift.start_time.Ticks && shift.end_time.Ticks >= myShift.start_time.Ticks)
+                if (shift.start_time.Ticks < myShift.start_time.Ticks && shift.end_time.Ticks > myShift.start_time.Ticks)
                 {
                     available = false;
                 }
-                if (shift.start_time.Ticks <= myShift.end_time.Ticks && shift.end_time.Ticks >= myShift.end_time.Ticks)
+                if (shift.start_time.Ticks <= myShift.end_time.Ticks && shift.end_time.Ticks > myShift.end_time.Ticks)
                 {
                     available = false;
                 }
@@ -148,13 +148,13 @@ using Radzen.Blazor;
                 available = true;
             }
         }
-        return availableShifts.Where(x => x.taken == false && (x.start_time.Ticks >= DateTime.Now.Ticks)).ToList();
+        return availableShifts.Where(x => x.taken == false && x.locked == false && (x.start_time.Ticks >= DateTime.Now.Ticks)).ToList();
     }
 
     [Parameter]
     public EventCallback<(bool, Shift)> OnClose { get; set; }
 
-    public Shift takenShift;
+    public Shift takenShift = new();
 
     private Task ModalOk()
     {
@@ -166,13 +166,16 @@ using Radzen.Blazor;
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Du er ved at tage en vagt. Tryk OK for at bekræfte.");
         if (confirmed)
         {
+            takenShift.volunteer = new();
+            takenShift.shift_id = s.shift_id;
+            takenShift.volunteer.volunteer_id = vol.volunteer_id;
+            await Http.PostAsJsonAsync($"api/method/assignshift", takenShift);
+
             shifts.Remove(s);
             s.taken = true;
-            takenShift = s;
-            takenShift.volunteer = vol;
-            await Http.PostAsJsonAsync($"api/method/assignshift", takenShift);
+            s.volunteer = vol;
             await grid.Reload();
-            await OnClose.InvokeAsync((true, takenShift));
+            await OnClose.InvokeAsync((true, s));
         }
     }
 
