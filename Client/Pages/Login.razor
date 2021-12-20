@@ -7,7 +7,7 @@
 @if (page_access == -1)
 {
     <div class="login">
-        <h1>Login her</h1>
+        <img src="ImageLogo.png" style="margin-left: 580px; width: 20%;"/>
         <RadzenCard class="w-1">
             <RadzenTemplateForm Data=@("SimpleLogin")>
                 <RadzenLogin AllowRegister="false" AllowResetPassword="false" Login=@(args => OnLogin(args)) Style="margin-bottom: 20px;" />

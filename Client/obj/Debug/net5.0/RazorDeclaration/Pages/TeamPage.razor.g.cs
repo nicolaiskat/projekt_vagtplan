@@ -125,7 +125,7 @@ using vagtplanen.Client.Components.Team_components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 79 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/TeamPage.razor"
+#line 80 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/TeamPage.razor"
        
 
     [Parameter] public Team tea { get; set; }

@@ -1,25 +1,21 @@
 ﻿<Properties StartupConfiguration="{756938E9-D97A-47CB-8B33-97138F273F9E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Server/Controllers/MethodController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Client/Pages/VolunteerPage.razor">
     <Files>
-      <File FileName="Client/Pages/TeamPage.razor" Line="124" Column="6" />
-      <File FileName="Server/Controllers/MethodController.cs" Line="65" Column="16" />
+      <File FileName="Client/Pages/Login.razor" Line="10" Column="31" />
+      <File FileName="Client/wwwroot/css/open-iconic/README.md" Line="29" Column="2" />
+      <File FileName="Client/Pages/VolunteerPage.razor" Line="31" Column="37" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="vagtplanen" expanded="True">
             <Node name="vagtplanen.Client" expanded="True">
-              <Node name="Components" expanded="True">
-                <Node name="Volunteer_components" expanded="True" />
+              <Node name="Pages" expanded="True">
+                <Node name="VolunteerPage.razor" selected="True" />
               </Node>
-              <Node name="Pages" expanded="True" />
+              <Node name="wwwroot" expanded="True" />
             </Node>
-            <Node name="vagtplanen.Server" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="MethodController.cs" selected="True" />
-              </Node>
-              <Node name="Services" expanded="True" />
-            </Node>
+            <Node name="vagtplanen.Server" expanded="True" />
             <Node name="vagtplanen.Shared" expanded="True">
               <Node name="Models" expanded="True" />
             </Node>

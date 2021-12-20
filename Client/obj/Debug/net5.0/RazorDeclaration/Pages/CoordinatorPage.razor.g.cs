@@ -118,7 +118,7 @@ using vagtplanen.Client.Components.Coordinator_components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 158 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/CoordinatorPage.razor"
+#line 159 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/CoordinatorPage.razor"
        
     [Parameter] public Coordinator coor { get; set; }
 

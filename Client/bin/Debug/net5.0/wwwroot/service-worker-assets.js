@@ -113,7 +113,7 @@
       "url": "_content\/BlazorPro.Spinkit\/spinkit.min.css"
     },
     {
-      "hash": "sha256-MNIFcmbvht8JV0piueH5BkihHjgo1YfU2MjxtrVWnxA=",
+      "hash": "sha256-F7SGmbxUOQOLWZwwtB78LnC9lwEcBsrWHlplF8Epn9w=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -921,11 +921,11 @@
       "url": "_framework\/vagtplanen.Shared.pdb"
     },
     {
-      "hash": "sha256-V9ogguoK8aqUfS0U6\/\/CilY1XPlNW\/6LCZ+Rtf7VGh0=",
+      "hash": "sha256-5wkOeqgSRN38IqAOWhJgDqhB4P8bJ2Qh5mSlsS1FBAs=",
       "url": "_framework\/vagtplanen.Client.dll"
     },
     {
-      "hash": "sha256-C8JHIkMU3BiGZtyn+NeTQfXK+kz+NkMGvUx2x4Z2rgs=",
+      "hash": "sha256-tkGv48qtzn7oWl1R+QpFx0+b+cJspxeRrDrARekgrdI=",
       "url": "_framework\/vagtplanen.Client.pdb"
     },
     {
@@ -1789,6 +1789,10 @@
       "url": "icon-512.png"
     },
     {
+      "hash": "sha256-20\/cupB2HyDKg19gkNSPPdQqE7tKz\/jKuGWDx1paLKA=",
+      "url": "ImageLogo.png"
+    },
+    {
       "hash": "sha256-idntrHiZcqvujNBgA9SIFhu9ZxgPkXUUOgT84xi7cos=",
       "url": "index.html"
     },
@@ -1805,5 +1809,5 @@
       "url": "vagtplanen.Client.bundle.scp.css"
     }
   ],
-  "version": "W\/pU19dx"
+  "version": "vLJWWj5B"
 };

@@ -118,7 +118,7 @@ using vagtplanen.Client.Components.Volunteer_components;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 126 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/VolunteerPage.razor"
+#line 127 "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/Pages/VolunteerPage.razor"
        
 
     [Parameter] public Volunteer vol { get; set; }
