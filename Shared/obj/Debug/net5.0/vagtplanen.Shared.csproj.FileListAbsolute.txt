@@ -31,3 +31,4 @@
 /Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.dll
 /Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Shared/obj/Debug/net5.0/ref/vagtplanen.Shared.dll
 /Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.pdb
+/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Shared/obj/Debug/net5.0/vagtplanen.Shared.csproj.AssemblyReference.cache

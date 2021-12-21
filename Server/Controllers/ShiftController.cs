@@ -47,36 +47,5 @@ namespace vagtplanen.Server.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
-        //[HttpPost]
-        //public IActionResult Create(Shift shift)
-        //{
-        //    try
-        //    {
-        //        var shiftCreated = _service.Create(shift);
-        //        return CreatedAtRoute("ShiftById", shiftCreated);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
-
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            try
-            {
-                _service.Delete(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                //log error
-                return StatusCode(500, ex.Message);
-            }
-        }
     }
 }

@@ -134,7 +134,7 @@ using Radzen.Blazor;
                 {
                     available = false;
                 }
-                if (shift.start_time.Ticks <= myShift.end_time.Ticks && shift.end_time.Ticks > myShift.end_time.Ticks)
+                if (shift.start_time.Ticks < myShift.end_time.Ticks && shift.end_time.Ticks > myShift.end_time.Ticks)
                 {
                     available = false;
                 }

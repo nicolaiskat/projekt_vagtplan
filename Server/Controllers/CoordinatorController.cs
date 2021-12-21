@@ -48,21 +48,6 @@ namespace vagtplanen.Server.Controllers
             }
         }
 
-        //[HttpPost]
-        //public IActionResult Create(Coordinator coor)
-        //{
-        //    try
-        //    {
-        //        var _coor = _service.Create(coor);
-        //        return CreatedAtRoute("CoordinatorById", _coor);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
-
         [HttpPut]
         public IActionResult Update(Coordinator coordinator)
         {
@@ -77,21 +62,5 @@ namespace vagtplanen.Server.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
-
-        //[HttpDelete]
-        //public IActionResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var _coor = _service.Delete(coor);
-        //        return CreatedAtRoute("CoordinatorById", _coor);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
     }
 }

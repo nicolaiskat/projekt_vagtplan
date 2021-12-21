@@ -83,20 +83,5 @@ namespace vagtplanen.Server.Services
                 return task;
             }
         }
-
-        public int Delete(int id)
-        {
-            using (var conn = OpenConnection(_connectionString))
-            {
-                var query = @"CALL delete_task(@_id)";
-                var value = new
-                {
-                    _id = id
-                };
-                conn.ExecuteAsync(query, value);
-
-                return id;
-            }
-        }
     }
 }

@@ -138,7 +138,6 @@ using Radzen.Blazor;
         await grid.Reload();
     }
 
-    
 
 #line default
 #line hidden

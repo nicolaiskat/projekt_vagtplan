@@ -78,20 +78,4 @@
         await grid.Reload();
     }
 
-    @*public void OnUpdateRow()
-    {
-        grid.Reload();
-    }
-
-    async Task SaveRow(Shift shift)
-    {
-        await grid.UpdateRow(shift);
-        await Http.PutAsJsonAsync<Shift>($"api", shift);
-    }
-
-    void CancelEdit(Shift shift)
-    {
-        grid.CancelEditRow(shift);
-    }*@
-
 }

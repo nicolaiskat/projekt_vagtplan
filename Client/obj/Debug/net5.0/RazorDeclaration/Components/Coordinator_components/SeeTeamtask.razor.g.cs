@@ -97,7 +97,7 @@ using Radzen.Blazor;
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/Components/Coordinator_components/SeeTeamtask.razor"
+#line 3 "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/Components/Coordinator_components/SeeTeamtask.razor"
 using vagtplanen.Shared.Models;
 
 #line default
@@ -111,14 +111,15 @@ using vagtplanen.Shared.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 48 "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/Components/Coordinator_components/SeeTeamtask.razor"
+#line 58 "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/Components/Coordinator_components/SeeTeamtask.razor"
        
 
-    public TeamTask[] teamtask;
+    public List<TeamTask> teamtask;
+    RadzenDataGrid<TeamTask> grid;
 
     protected async override Task OnInitializedAsync()
     {
-        teamtask = await Http.GetFromJsonAsync<TeamTask[]>("api/teamtask");
+        teamtask = await Http.GetFromJsonAsync<List<TeamTask>>("api/teamtask");
     }
 
     [Parameter]
@@ -130,9 +131,21 @@ using vagtplanen.Shared.Models;
         return OnClose.InvokeAsync(true);
     }
 
+    protected async Task deleteTeamtask(TeamTask tt)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Er du sikker på, at du vil slette denne opgave?");
+        if (confirmed)
+        {
+            await Http.DeleteAsync($"api/teamtask/{tt.teamtask_id}");
+            teamtask.Remove(tt);
+            await grid.Reload();
+        }
+    }
+
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JsRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient Http { get; set; }
     }
 }

@@ -63,39 +63,5 @@ namespace vagtplanen.Server.Controllers
             }
         }
 
-        [HttpPut]
-        public IActionResult Update(Coupon coupon)
-        {
-        
-            try
-            {
-             
-                var couponUpdated = _service.Update(coupon);
-                return Ok(couponUpdated);
-            }
-            //Hvis fejl
-            catch (Exception ex)
-            {
-                //Returnerer Status 500 for fejl og skriver meddelelsen for fejlen
-                return StatusCode(500, ex.Message);
-            }
-        }
-        //Method til at hente delete volunteer i databasse gennnemm .../api/volunteer/@id
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-         
-            try
-            {
-                _service.Delete(id);
-                return NoContent();
-            }
-            //Hvis fejl
-            catch (Exception ex)
-            {
-                //Returnerer Status 500 for fejl og skriver meddelelsen for fejlen
-                return StatusCode(500, ex.Message);
-            }
-        }
     }
 }

@@ -60,51 +60,5 @@ namespace vagtplanen.Server.Services
                 return obj;
             }
         }
-
-        public Coupon Update(Coupon obj)
-        {
-
-            using (var conn = OpenConnection(_connectionString))
-            {
-
-                var query = @"CALL edit_coupon(@id, @_description, @_price)";
-
-                var values = new
-                {
-
-                    id = obj.coupon_id,
-                    _description = obj.description,
-                    _price = obj.price
-                };
-
-                conn.Execute(query, values);
-
-                return obj;
-            }
-
-
-        }
-
-        public int Delete(int id)
-        {
-           
-            using (var conn = OpenConnection(_connectionString))
-            {
-
-                var query = @"CALL delete_coupon(@_id)";
-
-                var value = new
-                {
-
-                    _id = id
-                };
-
-                conn.ExecuteAsync(query, value);
-
-                return id;
-            }
-        }
-
-
     }
 }

@@ -73,26 +73,6 @@ namespace vagtplanen.Server.Services
             }
         }
 
-        //public Coordinator CreateCoordinator(Coordinator obj)
-        //{
-        //    using (var conn = OpenConnection(_connectionString))
-        //    {
-        //        var query = @"CALL add_coordinator(@first_name, @last_name, @mobile, @email, @address, @gender, @cpr @password)";
-        //        var values = new
-        //        {
-        //            first_name = obj.first_name,
-        //            last_name = obj.last_name,
-        //            mobil = obj.mobile,
-        //            email = obj.email,
-        //            address = obj.address,
-        //            gender = obj.gender,
-        //            cpr = obj.cpr,
-        //            password = obj.password
-        //        };
-
-        //        conn.ExecuteAsync(query, values);
-        //        return obj;
-        //    }
-        //}
+        
     }
 }
