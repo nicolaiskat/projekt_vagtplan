@@ -4,7 +4,7 @@
 @inject NavigationManager uriHelper
 
 <div class="top-row px-3">
-    <img src="ImageLogo.png" style="width: 7%;">
+    <img src="ImageLogo.png" class="top-img">
     <button type="button" class="btn btn-primary" id="right" @onclick="@ReloadPage">Log ud</button>
 </div>
 
@@ -88,7 +88,7 @@
                     <RadzenDataGridColumn TItem="Shift" Property="task.description" Title="Beskrivelse" />
                     <RadzenDataGridColumn TItem="Shift" Property="start_time" Title="Start tidspunkt" />
                     <RadzenDataGridColumn TItem="Shift" Property="end_time" Title="Slut tidspunkt" />
-                    <RadzenDataGridColumn TItem="Shift" Property="shift_id" Title="Frigiv vagt" Width="85px" Filterable="false" Sortable="false">
+                    <RadzenDataGridColumn TItem="Shift" Property="shift_id" Title="Frigiv vagt" Width="80px" Filterable="false" Sortable="false">
                         <Template Context="shift">
                             <RadzenButton Icon="delete_forever" Click=@(args => OnRelease(shift)) />
                         </Template>

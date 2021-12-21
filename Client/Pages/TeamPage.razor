@@ -52,7 +52,7 @@
                     <RadzenDataGridColumn TItem="TeamTask" Property="teamtask.description" Title="Beskrivelse" />
                     <RadzenDataGridColumn TItem="TeamTask" Property="start_time" Title="Start tidspunkt" />
                     <RadzenDataGridColumn TItem="TeamTask" Property="end_time" Title="Slut tidspunkt" />
-                    <RadzenDataGridColumn TItem="TeamTask" Property="teamtask_id" Title="Frigiv vagt" Width="85px" Filterable="false" Sortable="false">
+                    <RadzenDataGridColumn TItem="TeamTask" Property="teamtask_id" Title="Frigiv vagt" Width="80px" Filterable="false" Sortable="false">
                         <Template Context="teamtask">
                             <RadzenButton Icon="delete_forever" Click=@(args => OnRelease(teamtask)) />
                         </Template>

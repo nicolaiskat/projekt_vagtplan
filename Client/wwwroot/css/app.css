@@ -10,9 +10,16 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #ff6d41;
+    border-color: #B3611C;
 }
+
+.btn-primary :hover{
+    color: #fff;
+    background-color: #E67B25;
+    border-color: #B3611C;
+}
+
 
 #right {
     float: right;
@@ -29,7 +36,7 @@ h1 {
 .vagter-ting {
     margin-left: auto;
     margin-right: auto;
-    width: 1050px;
+    width: 97%;
 }
 
 .input-box{
@@ -48,8 +55,21 @@ h1 {
     margin-right: auto;
 }
 
+.shifts h2 {
+    text-align:center;
+}
+
 .login {
-    margin-top: 10%;
+    margin-top: 5%;
+}
+
+.login-img {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1%;
+    padding-left:90px;
+    width:30%;
+    max-width: 400px;
 }
 
 .modal-dialog{
@@ -58,6 +78,10 @@ h1 {
 
 .content {
     padding-top: 1.1rem;
+}
+
+.top-img {
+    width:7%;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -73,21 +97,70 @@ h1 {
 }
 
 .w-7 {
-    width: 500px;
-    margin: 7px;
+    width: 49%;
+    margin: 0.5%;
     border-width: 2px;
     border-color: darkgray;
+    font-size:1.4vw;
+}
+
+.w-7 b {
+    font-size: 1.6vw;
+  
+}
+
+@media screen and (max-width: 700px){
+    .w-7 {
+        width: 97%;
+        margin: 1.5%;
+        border-width: 2px;
+        border-color: darkgray;
+        font-size: 3vw;
+    }
+
+    .w-7 b {
+        font-size: 3.5vw;
+    }
+
+    .col-md-6 button {
+        font-size: 3.6vw !important;
+    }
+
+    .login-img {
+        padding-left: 40px;
+        width: 65%;
+    }
+
+    .rz-cell-data {
+        font-size:1.6vw !important;
+    }
+
+    .rz-column-title {
+        font-size: 2vw !important;
+    }
+
+    .top-img {
+        width: 30% !important;
+    }
 }
 
 .w-6 {
-    width: 1050px;
+    width: 97%;
     background: #E0E0E0 !important;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    max-width:1000px;
 }
 
 .w-1 {
-    width: 622px;
+    width: 95%;
     background: #E0E0E0 !important;
+    max-width: 650px;
+}
+
+.col-md-6 button {
+    font-size: 1.3vw;
+    margin-bottom: 1.5%;
+    box-shadow: 0.6px 0.6px #1b663e;
 }
 
 #blazor-error-ui {

@@ -1765,19 +1765,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/nicolaiskat/.nuget/packages/": {}
+    "/Users/andreasskovaagaard/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj",
+      "projectUniqueName": "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/vagtplanen.Client.csproj",
       "projectName": "vagtplanen.Client",
-      "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/vagtplanen.Client.csproj",
-      "packagesPath": "/Users/nicolaiskat/.nuget/packages/",
-      "outputPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Client/obj/",
+      "projectPath": "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/vagtplanen.Client.csproj",
+      "packagesPath": "/Users/andreasskovaagaard/.nuget/packages/",
+      "outputPath": "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Client/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/nicolaiskat/.config/NuGet/NuGet.Config"
+        "/Users/andreasskovaagaard/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -1789,8 +1789,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
-              "projectPath": "/Users/nicolaiskat/Projects/LetsGoGreenRepo/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
+            "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj": {
+              "projectPath": "/Users/andreasskovaagaard/Dropbox/EAAA/IT-Arkitektur/Kode/2. Semester Eksamen/projekt_vagtplan/Shared/vagtplanen.Shared.csproj"
             }
           }
         }
@@ -1840,7 +1840,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Runtime.browser-wasm",
-            "version": "[5.0.12, 5.0.12]"
+            "version": "[5.0.13, 5.0.13]"
           }
         ],
         "frameworkReferences": {
@@ -1848,7 +1848,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.100/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.404/RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
