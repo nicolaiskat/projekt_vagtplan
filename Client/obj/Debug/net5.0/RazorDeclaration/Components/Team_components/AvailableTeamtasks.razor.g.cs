@@ -132,7 +132,7 @@ using vagtplanen.Shared.Models;
 
     private Task ModalOk()
     {
-        return OnClose.InvokeAsync((true, takenTask));
+        return OnClose.InvokeAsync((false, null));
     }
 
     async void OnTake(TeamTask task)
@@ -140,11 +140,17 @@ using vagtplanen.Shared.Models;
         bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Du er ved at tage en teamopgave. Tryk OK for at bekræfte.");
         if (confirmed)
         {
-            task.taken = true;
-            takenTask = task;
-            takenTask.team = tea;
+            takenTask.team = new();
+            takenTask.teamtask_id = task.teamtask_id;
+            takenTask.team.team_id = tea.team_id;
+
             await Http.PostAsJsonAsync($"api/method/assignteamtask", takenTask);
+
+            tasks.Remove(task);
+            task.taken = true;
+            task.team = tea;
             await grid.Reload();
+            await OnClose.InvokeAsync((true, task));
         }
     }
 
