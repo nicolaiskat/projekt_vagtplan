@@ -1,14 +1,20 @@
 ﻿<Properties StartupConfiguration="{756938E9-D97A-47CB-8B33-97138F273F9E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Client/wwwroot/css/app.css">
-    <Files>
-      <File FileName="Client/Components/Coordinator_components/CreateVolunteers.razor" Line="9" Column="39" />
-      <File FileName="Client/wwwroot/css/app.css" Line="1" Column="1" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="vagtplanen" expanded="True">
-            <Node name="vagtplanen.Server" expanded="True" selected="True">
+            <Node name="vagtplanen.Client" expanded="True">
+              <Node name="Components" expanded="True">
+                <Node name="Coordinator_components" expanded="True">
+                  <Node name="CreateVolunteers.razor" selected="True" />
+                </Node>
+              </Node>
+              <Node name="wwwroot" expanded="True">
+                <Node name="css" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="vagtplanen.Server" expanded="True">
               <Node name="Controllers" expanded="True" />
             </Node>
           </Node>
